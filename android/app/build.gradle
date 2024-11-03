@@ -3,6 +3,14 @@ apply plugin: 'com.android.application'
 android {
     namespace "io.ionic.starter"
     compileSdk rootProject.ext.compileSdkVersion
+      signingConfigs {
+        release {
+            storeFile file("D:/Proyectos/AplicacionFinalDios/asistenciaApp2/android/my-release-key.keystore") // Reemplaza con el nombre de tu archivo keystore
+            storePassword "winipoo1" // Cambia esto por tu contraseña del keystore
+            keyAlias "seavuelo" // Cambia esto por el alias que has usado
+            keyPassword "winipoo1" // Cambia esto por la contraseña del alias
+        }
+    }
     defaultConfig {
         applicationId "io.ionic.starter"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -20,12 +28,18 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Configuración del keystore para firmar la APK
+            signingConfig signingConfigs.release
         }
     }
+
+    // Definición de la configuración de firma
+  
 }
 
 repositories {
-    flatDir{
+    flatDir {
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
 }

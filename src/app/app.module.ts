@@ -13,6 +13,7 @@ import { initializeApp, getApp } from 'firebase/app';
 import { provideFirestore } from '@angular/fire/firestore';
 import { provideAuth, initializeAuth, browserLocalPersistence, browserSessionPersistence, browserPopupRedirectResolver } from '@angular/fire/auth';
 import { getFirestore } from 'firebase/firestore';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx'; // Importa BarcodeScanner
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +27,7 @@ import { getFirestore } from 'firebase/firestore';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideFirebaseApp(() => initializeApp(environment.firebase)), // Inicializa Firebase
+    BarcodeScanner, provideFirebaseApp(() => initializeApp(environment.firebase)), // Inicializa Firebase
     provideFirestore(() => getFirestore()), // Provee Firestore
     provideAuth(() => 
       initializeAuth(getApp(), {

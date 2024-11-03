@@ -12,8 +12,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   barcodes: Barcode[] = [];
 
   constructor(private alertController: AlertController) {}
-
-  ngOnInit() {
+  ngOnInit(){
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
     });
@@ -36,8 +35,8 @@ export class RegistrarAsistenciaPage implements OnInit {
 
   async presentAlert(): Promise<void> {
     const alert = await this.alertController.create({
-      header: 'Permission denied',
-      message: 'Please grant camera permission to use the barcode scanner.',
+      header: 'Permiso denegado',
+      message: 'Para usar la aplicación autorizar los permisos de cámara',
       buttons: ['OK'],
     });
     await alert.present();
