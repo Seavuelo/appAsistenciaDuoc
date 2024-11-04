@@ -1,0 +1,29 @@
+<app-encabezado></app-encabezado>
+<ion-content color="tertiary">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Detalles de la Clase</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="detail">
+        <p><strong>Asignatura:</strong> {{ clase?.asignatura }}</p>
+      </div>
+      <div class="detail">
+        <p><strong>Fecha:</strong> {{ clase?.['fecha-hora']?.toDate() | date: 'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+      <div class="detail">
+        <p><strong>Profesor:</strong> {{ profesorDetalles?.nombre }} {{ profesorDetalles?.apellido_paterno }}</p>
+      </div>
+      <div class="detail">
+        <p><strong>Código de Clase:</strong> {{ clase?.codigo }}</p>
+      </div>
+
+      <h2 class="sub-title">Asistentes</h2>
+      <ion-list>
+        <ion-item *ngFor="let asistente of asistentesDetalles" class="assistant-item">
+          <p>{{ asistente.nombre }} {{ asistente.segundo_nombre }} {{ asistente.apellido_paterno }} {{ asistente.apellido_materno }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

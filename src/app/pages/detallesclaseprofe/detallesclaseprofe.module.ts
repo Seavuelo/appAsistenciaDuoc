@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AsistenciaprofePageRoutingModule } from './asistenciaprofe-routing.module';
+import { DetallesclaseprofePageRoutingModule } from './detallesclaseprofe-routing.module';
 
-import { AsistenciaprofePage } from './asistenciaprofe.page';
+import { DetallesclaseprofePage } from './detallesclaseprofe.page';
 import { ComponentsModule } from "../../components/components.module";
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from "../../components/components.module";
     CommonModule,
     FormsModule,
     IonicModule,
-    AsistenciaprofePageRoutingModule,
+    DetallesclaseprofePageRoutingModule,
     ComponentsModule
 ],
-  declarations: [AsistenciaprofePage]
+  declarations: [DetallesclaseprofePage]
 })
-export class AsistenciaprofePageModule {}
+export class DetallesclaseprofePageModule {}

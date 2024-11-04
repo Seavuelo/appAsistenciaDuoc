@@ -1,0 +1,41 @@
+<app-encabezado></app-encabezado>
+
+<ion-content class="ion-padding" *ngIf="asignatura">
+  <ion-card color="secondary" class="detail-card">
+    <ion-card-header>
+      <ion-card-title>{{ asignatura.nombre }}</ion-card-title>
+      <ion-card-subtitle>Aula: {{ asignatura.aula }}</ion-card-subtitle>
+      <ion-card-subtitle>Horario: {{ asignatura.horario }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="toggle-container">
+        <ion-item button (click)="toggleAlumnos()" class="toggle-item">
+          <ion-label>Alumnos Inscritos</ion-label>
+          <ion-icon slot="end" [name]="showAlumnos ? 'chevron-up' : 'chevron-down'"></ion-icon>
+        </ion-item>
+        <ion-list *ngIf="showAlumnos">
+          <ion-item *ngFor="let alumno of alumnos" class="list-item">
+            <ion-label>{{ alumno }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div class="toggle-container">
+        <ion-item button (click)="toggleProfesores()" class="toggle-item">
+          <ion-label>Profesores Encargados</ion-label>
+          <ion-icon slot="end" [name]="showProfesores ? 'chevron-up' : 'chevron-down'"></ion-icon>
+        </ion-item>
+        <ion-list *ngIf="showProfesores">
+          <ion-item *ngFor="let profesor of profesores" class="list-item">
+            <ion-label>{{ profesor }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+      <ion-button expand="full" color="primary" (click)="presentAlert()" class="create-qr-button">
+        Crear QR de Asistencia
+      </ion-button>
+      
+    </ion-card-content>
+  </ion-card>
+</ion-content>

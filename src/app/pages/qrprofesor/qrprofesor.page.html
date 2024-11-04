@@ -1,0 +1,24 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="presentAlertGoBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="codigoQR">
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-card-title>Código QR para la Asignatura</ion-card-title>
+      <ion-card-subtitle>ID: {{ codigoQR }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content class="qr-content">
+      <div class="qr-container">
+        <img [src]="qrCodeDataUrl" alt="Código QR" />
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,19 +1,22 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Barcode Scanner</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado></app-encabezado>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let barcode of barcodes">
-      <ion-label position="stacked">{{ barcode.format }}</ion-label>
-      <ion-input type="text" [value]="barcode.rawValue"></ion-input>
-    </ion-item>
-  </ion-list>
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="scan()" [disabled]="!isSupported">
-      <ion-icon name="scan"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+
+
+<ion-content class="ion-padding">
+  <div class="title-container">
+    <h2>¡Registrar tu asistencia!</h2>
+    <p>Aprieta el botón QR para empezar a registrar tu asistencia.</p>
+  </div>
+
+  <!-- Mostrar la ubicación -->
+  <div *ngIf="locationMessage" style="color: black;">
+    <p>{{ locationMessage }}</p>
+  </div>
+
+
+  <div class="fab-container">
+    <ion-button (click)="scan()" color="secondary" [disabled]="!isSupported" expand="block" class="large-button">
+      <ion-icon name="qr-code-outline" class="black-icon"></ion-icon>
+    </ion-button>
+  </div>
 </ion-content>

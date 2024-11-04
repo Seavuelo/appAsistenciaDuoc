@@ -1,27 +1,31 @@
+<ion-header>
+  <ion-toolbar color="secondary" style="--border-bottom: none;">
+    <ion-buttons slot="end">
+      <ion-button (click)="openPopover($event)">
+        <ion-icon name="person" style="color: white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
 
 <ion-content color="tertiary">
-  <ion-button class="back-button" (click)="goBack()" fill="clear">
-    <ion-icon name="arrow-back-outline"></ion-icon>
-  </ion-button>
-
-  <div id="header">
-    
-  </div>
+  <div id="header"></div>
 
   <ion-card color="primary" class="card">
     <ion-card-header class="ion-text-center">
-      <ion-card-title>Menú</ion-card-title>
+      <ion-card-title>Bienvenido Profesor!</ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-    </ion-card-content>
   </ion-card>
 
-
-
-
-
-
-
-
+  <div *ngFor="let item of vinculos">
+    <ion-card color="primary" class="card-item">
+      <ion-card-content>
+        <ion-item color="primary" routerLink="{{item.ruta}}">
+          <ion-label class="item-title">{{item.titulo}}</ion-label>
+          <ion-icon slot="end" name="{{item.icono}}"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

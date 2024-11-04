@@ -6,9 +6,9 @@ android {
       signingConfigs {
         release {
             storeFile file("D:/Proyectos/AplicacionFinalDios/asistenciaApp2/android/my-release-key.keystore") // Reemplaza con el nombre de tu archivo keystore
-            storePassword "winipoo1" // Cambia esto por tu contraseña del keystore
+            storePassword "" // Cambia esto por tu contraseña del keystore
             keyAlias "seavuelo" // Cambia esto por el alias que has usado
-            keyPassword "winipoo1" // Cambia esto por la contraseña del alias
+            keyPassword "" // Cambia esto por la contraseña del alias
         }
     }
     defaultConfig {

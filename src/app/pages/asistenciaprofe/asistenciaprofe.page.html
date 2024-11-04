@@ -1,13 +1,29 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>asistenciaprofe</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado></app-encabezado>
+<ion-content color="tertiary">
+  <div id="header"></div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">asistenciaprofe</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card color="primary" class="card">
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>Clases</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card *ngFor="let item of asignaturas">
+    <ion-card-header (click)="item.showClases = !item.showClases">
+      <ion-card-subtitle>{{ item.asignatura_id }}</ion-card-subtitle>
+      <ion-card-title>{{ item.nombre }}</ion-card-title>
+      <ion-card-subtitle>Aula: {{ item.aula }}</ion-card-subtitle>
+      <ion-card-subtitle>Horario: {{ item.horario }}</ion-card-subtitle>
+      <ion-icon name="chevron-down" *ngIf="!item.showClases"></ion-icon>
+      <ion-icon name="chevron-up" *ngIf="item.showClases"></ion-icon>
+    </ion-card-header>
+
+    <!-- Lista de clases (fechas) de la asignatura -->
+    <ion-list *ngIf="item.showClases && (clases[item.asignatura_id]?.length ??0) > 0">
+      <ion-item *ngFor="let clase of clases[item.asignatura_id]" (click)="verDetallesClase(clase.codigo)">
+        Fecha de clase: {{ clase['fecha-hora'].toDate() | date: 'dd/MM/yyyy' }}
+      </ion-item>
+    </ion-list>
+    
+  </ion-card>
 </ion-content>

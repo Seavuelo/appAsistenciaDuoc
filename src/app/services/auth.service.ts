@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'; 
-import { Firestore, doc, getDoc, setDoc, collection, getDocs, query, where } from '@angular/fire/firestore'; 
+import { Firestore, doc, getDoc, setDoc} from '@angular/fire/firestore'; 
+import { Router } from '@angular/router'; // Importa Router
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,7 @@ export class AuthService {
   private _storage: Storage | null = null;
   private auth = getAuth(); 
 
-  constructor(private storage: Storage, private db: Firestore) {
+  constructor(private storage: Storage, private db: Firestore,private router: Router) {
     this.init(); // Inicializa el almacenamiento
   }
 
@@ -74,6 +76,7 @@ getCurrentUserUid(): string | null {
     try {
       await signOut(this.auth);
       console.log('Usuario cerrado sesión');
+      this.router.navigate(['/login']); // Redirige a la página de inicio de sesión
     } catch (error: any) {
       console.error('Error al cerrar sesión:', error);
     }

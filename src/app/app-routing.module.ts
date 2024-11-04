@@ -53,10 +53,25 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
+  
+
   {
-    path: 'perfilprofe',
-    loadChildren: () => import('./pages/perfilprofe/perfilprofe.module').then( m => m.PerfilprofePageModule)
+    path: 'asignaturasprofe',
+    loadChildren: () => import('./pages/asignaturasprofe/asignaturasprofe.module').then( m => m.AsignaturasprofePageModule)
   },
+  {
+    path: 'qrprofesor',
+    loadChildren: () => import('./pages/qrprofesor/qrprofesor.module').then( m => m.QrprofesorPageModule)
+  },
+  {
+    path: 'claseprofesor',
+    loadChildren: () => import('./pages/claseprofesor/claseprofesor.module').then( m => m.ClaseprofesorPageModule)
+  },  {
+    path: 'detallesclaseprofe',
+    loadChildren: () => import('./pages/detallesclaseprofe/detallesclaseprofe.module').then( m => m.DetallesclaseprofePageModule)
+  },
+
+
   
 
   
