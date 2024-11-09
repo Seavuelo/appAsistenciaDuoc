@@ -1,4 +1,5 @@
 <app-encabezado></app-encabezado>
+
 <ion-content color="tertiary">
   <div id="header"></div>
 
@@ -19,11 +20,20 @@
     </ion-card-header>
 
     <!-- Lista de clases (fechas) de la asignatura -->
-    <ion-list *ngIf="item.showClases && (clases[item.asignatura_id]?.length ??0) > 0">
+    <ion-list *ngIf="item.showClases && (clases[item.asignatura_id]?.length ?? 0) > 0">
       <ion-item *ngFor="let clase of clases[item.asignatura_id]" (click)="verDetallesClase(clase.codigo)">
-        Fecha de clase: {{ clase['fecha-hora'].toDate() | date: 'dd/MM/yyyy' }}
+        <div class="ion-text-wrap">
+          <!-- Mostrar fecha con hora -->
+          Fecha de clase: {{ clase['fecha-hora'].toDate() | date: 'dd/MM/yyyy HH:mm' }}
+        </div>
+        
+        <!-- Botón de eliminación -->
+        <!-- Botón de eliminación -->
+<ion-button color="danger" (click)="eliminarClase(clase.codigo, item.asignatura_id); $event.stopPropagation()" fill="clear">
+  <ion-icon name="trash"></ion-icon>
+</ion-button>
+
       </ion-item>
     </ion-list>
-    
   </ion-card>
 </ion-content>

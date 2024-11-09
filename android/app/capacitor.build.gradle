@@ -14,8 +14,10 @@ dependencies {
     implementation project(':capacitor-geolocation')
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-network')
     implementation project(':capacitor-status-bar')
-
+    implementation "com.android.support:support-v4:27.+"
+    implementation "com.android.support:support-v4:27.+"
 }
 apply from: "../../node_modules/@starley/barcodescanner-sdk31/src/android/barcodescanner.gradle"
 apply from: "../../node_modules/phonegap-plugin-barcodescanner/src/android/barcodescanner.gradle"

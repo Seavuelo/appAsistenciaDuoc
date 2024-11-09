@@ -10,7 +10,7 @@ import { PerfilPopoverPage } from '../perfil-popover/perfil-popover.page';
   templateUrl: './inicio.page.html',
   styleUrls: ['./inicio.page.scss'],
 })
-export class InicioPage implements OnInit, OnDestroy {
+export class InicioPage implements OnInit {
   private backButtonSubscription: any;
 
   constructor(
@@ -22,21 +22,8 @@ export class InicioPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.navigationService.setCurrentPage('inicio');
-
-    // Escuchar el evento de retroceso y guardar la suscripción
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      if (this.navigationService.isHomePage()) {
-      }
-    });
   }
 
-  ngOnDestroy() {
-    // Desuscribirse del evento de retroceso cuando se abandona InicioPage
-    this.backButtonSubscription.unsubscribe();
-  }
-
-  
 
   async openPopover(event: Event) {
     const popover = await this.popoverController.create({

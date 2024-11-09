@@ -35,3 +35,27 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+/* global.scss o variables.scss */
+
+/* variables.scss o global.scss */
+/* Ignorar la preferencia del sistema del usuario */
+@media (prefers-color-scheme: dark) {
+    :root {
+      --ion-background-color: #121212;
+      --ion-text-color: #ffffff;
+      --ion-toolbar-background: #1f1f1f;
+      --ion-item-background: #1f1f1f;
+      --ion-card-background: #1f1f1f;
+      --ion-item-border-color: #333;
+      --ion-button-background: #6200ea;
+      --ion-button-text-color: #ffffff;
+      --ion-input-background: #333333;
+      --ion-input-placeholder-color: #aaaaaa;
+    }
+  }
+  
+  body {
+    background-color: var(--ion-background-color);
+    color: var(--ion-text-color);
+  }
+  
