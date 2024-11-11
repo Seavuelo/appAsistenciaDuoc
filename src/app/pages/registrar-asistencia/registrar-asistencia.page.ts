@@ -107,11 +107,14 @@ export class RegistrarAsistenciaPage implements OnInit {
   }
 
   async processQR(codigoQR: string, alumnoId: string) {
+    await this.NavigationService.presentLoading('Cargando datos...');
+
     const claseRef = doc(this.firestore, `clase/${codigoQR}`);
     const claseSnap = await getDoc(claseRef);
 
     if (!claseSnap.exists()) {
       this.presentAlert('QR inválido', 'El código QR no corresponde a ninguna clase.');
+      await this.NavigationService.dismissLoading();
       return;
     }
 
@@ -119,6 +122,8 @@ export class RegistrarAsistenciaPage implements OnInit {
 
     if (claseData['asistentes'] && claseData['asistentes'].includes(alumnoId)) {
       this.presentAlert('Ya estás presente', 'Ya estás registrado en esta clase.');
+      await this.NavigationService.dismissLoading();
+
       return;
     }
 
@@ -127,6 +132,8 @@ export class RegistrarAsistenciaPage implements OnInit {
     });
 
     this.presentAlert('Asistencia registrada', 'Tu asistencia ha sido registrada exitosamente.');
+    await this.NavigationService.dismissLoading();
+
   }
 
   async saveOfflineData(data: any) {

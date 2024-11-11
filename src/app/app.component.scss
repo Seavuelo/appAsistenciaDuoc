@@ -1,0 +1,20 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+      --ion-background-color: #121212;
+      --ion-text-color: #ffffff;
+      --ion-toolbar-background: #1f1f1f;
+      --ion-item-background: #1f1f1f;
+      --ion-card-background: #1f1f1f;
+      --ion-item-border-color: #333;
+      --ion-button-background: #6200ea;
+      --ion-button-text-color: #ffffff;
+      --ion-input-background: #333333;
+      --ion-input-placeholder-color: #aaaaaa;
+    }
+  }
+  
+
+  /* Estilo global para cambiar el color del texto en todos los inputs */
+ion-input {
+  --color: black; /* Cambiar el color del texto dentro de los inputs a negro */
+}

@@ -8,14 +8,18 @@ import { Platform } from '@ionic/angular';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(private platform: Platform) {
+    // Inicialización de Firebase
     const app = initializeApp(environment.firebase);
-    console.log('Firebase initialized:', app);}
-    ngOnInit() {
-      // Esperar a que la plataforma esté lista y luego aplicar el modo oscuro
-      this.platform.ready().then(() => {
-        document.body.classList.add('dark'); // Forzar el modo oscuro
-      });
-    } 
+    console.log('Firebase initialized:', app);
+  }
+
+  ngOnInit() {
+    // Asegurarse de que el modo oscuro está desactivado y siempre usar el modo claro
+    this.platform.ready().then(() => {
+      // Forzar el modo claro en todas las plataformas
+      document.body.classList.remove('dark');
+    });
+  }
 }

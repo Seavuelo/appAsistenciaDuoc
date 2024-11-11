@@ -63,3 +63,8 @@
 	--ion-color-dark-tint: #444444;
 
 }
+
+ion-app {
+	--background: var(--ion-background-color);
+	--color: var(--ion-text-color);
+  }
