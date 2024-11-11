@@ -50,48 +50,48 @@ export class RegistrarAsistenciaPage implements OnInit {
 
   async scan(): Promise<void> {
     await this.NavigationService.presentLoading('Cargando datos...');
-
+  
     const granted = await this.requestPermissions();
-
+  
     if (!granted) {
       this.presentAlert('Permiso denegado', 'Para usar la aplicación, autoriza los permisos de cámara.');
       await this.NavigationService.dismissLoading();
       return;
     }
-
+  
     const position = await this.checkLocation();
     this.locationMessage = position ? `Ubicación actual: ${this.latitude?.toFixed(6)}, ${this.longitude?.toFixed(6)}` : 'No se pudo obtener la ubicación.';
-
+  
     if (!position) {
-      this.presentAlert('Ubicación no permitida', 'No estás dentro del área permitida para registrar asistencia. ' + this.locationMessage);
+      this.presentAlert('Ubicación no permitida', 'No estás dentro del área permitida para registrar asistencia.' + this.locationMessage);
       await this.NavigationService.dismissLoading();
       return;
     }
-
+  
     const { barcodes } = await BarcodeScanner.scan();
     this.barcodes = barcodes;
-
+  
     if (barcodes.length === 0) {
       this.presentAlert('QR inválido', 'No se detectó ningún código QR.');
       await this.NavigationService.dismissLoading();
       return;
     }
-
+  
     const codigoQR = barcodes[0].rawValue;
-    const alumnoId = this.AuthService.getCurrentUserUid();  // Reemplazar con el método para obtener el UID del alumno
-
+    const alumnoId = this.AuthService.getCurrentUserUid();
+  
     if (!alumnoId) {
       this.presentAlert('Error', 'No se ha podido obtener el ID del usuario. Asegúrate de estar autenticado.');
       await this.NavigationService.dismissLoading();
       return;
     }
-    
+  
     if (!codigoQR || codigoQR.length !== 5) {
       this.presentAlert('QR inválido', 'El código QR escaneado no es válido.');
       await this.NavigationService.dismissLoading();
       return;
     }
-    
+  
     // Verifica el estado de la red
     const networkStatus = await Network.getStatus();
     if (!networkStatus.connected) {
@@ -101,40 +101,46 @@ export class RegistrarAsistenciaPage implements OnInit {
       await this.NavigationService.dismissLoading();
       return;
     }
-
+  
     // Si está en línea, procesa el QR como de costumbre
     await this.processQR(codigoQR, alumnoId);
+    await this.NavigationService.dismissLoading();
   }
+  
 
   async processQR(codigoQR: string, alumnoId: string) {
-    await this.NavigationService.presentLoading('Cargando datos...');
-
-    const claseRef = doc(this.firestore, `clase/${codigoQR}`);
-    const claseSnap = await getDoc(claseRef);
-
-    if (!claseSnap.exists()) {
-      this.presentAlert('QR inválido', 'El código QR no corresponde a ninguna clase.');
+    try {
+      await this.NavigationService.presentLoading('Cargando datos...');
+  
+      const claseRef = doc(this.firestore, `clase/${codigoQR}`);
+      const claseSnap = await getDoc(claseRef);
+  
+      if (!claseSnap.exists()) {
+        await this.presentAlert('QR inválido', 'El código QR no corresponde a ninguna clase.');
+        return;  // Salir antes de continuar
+      }
+  
+      const claseData = claseSnap.data();
+  
+      if (claseData['asistentes'] && claseData['asistentes'].includes(alumnoId)) {
+        await this.presentAlert('Ya estás presente', 'Ya estás registrado en esta clase.');
+        return;  // Salir antes de continuar
+      }
+  
+      await updateDoc(claseRef, {
+        asistentes: arrayUnion(alumnoId)
+      });
+  
+      await this.presentAlert('Asistencia registrada', 'Tu asistencia ha sido registrada exitosamente.');
+    } catch (error) {
+      console.error('Error al procesar QR:', error);
+      await this.presentAlert('Error', 'Hubo un problema al registrar tu asistencia. Intenta nuevamente.');
+    } finally {
+      // Siempre cerrar el loading spinner
       await this.NavigationService.dismissLoading();
-      return;
     }
-
-    const claseData = claseSnap.data();
-
-    if (claseData['asistentes'] && claseData['asistentes'].includes(alumnoId)) {
-      this.presentAlert('Ya estás presente', 'Ya estás registrado en esta clase.');
-      await this.NavigationService.dismissLoading();
-
-      return;
-    }
-
-    await updateDoc(claseRef, {
-      asistentes: arrayUnion(alumnoId)
-    });
-
-    this.presentAlert('Asistencia registrada', 'Tu asistencia ha sido registrada exitosamente.');
-    await this.NavigationService.dismissLoading();
-
   }
+  
 
   async saveOfflineData(data: any) {
     this.offlineData.push(data);

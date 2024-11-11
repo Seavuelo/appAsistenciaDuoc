@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     // Asegurarse de que el modo oscuro está desactivado y siempre usar el modo claro
     this.platform.ready().then(() => {
       // Forzar el modo claro en todas las plataformas
-      document.body.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
     });
   }
 }
