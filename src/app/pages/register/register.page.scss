@@ -24,3 +24,7 @@
     text-align: center;
     margin-top: 30px;
   }
+  /* Asegúrate de que el texto dentro de los inputs sea negro */
+ion-input {
+  --color: black; /* Texto negro dentro de los inputs */
+}

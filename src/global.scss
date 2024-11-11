@@ -54,8 +54,8 @@
     }
   }
   
-  body {
-    background-color: var(--ion-background-color);
-    color: var(--ion-text-color);
-  }
-  
+
+  /* Estilo global para cambiar el color del texto en todos los inputs */
+ion-input {
+  --color: black; /* Cambiar el color del texto dentro de los inputs a negro */
+}

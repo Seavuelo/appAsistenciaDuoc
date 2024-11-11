@@ -4,9 +4,8 @@
   <ion-card color="primary">
     <ion-card-header class="ion-padding ion-text-center">
       <ion-card-title>Registro</ion-card-title>
-      
     </ion-card-header>
-    
+
     <ion-card-content>
       <!-- Campo de Email -->
       <ion-item color="primary">
@@ -17,7 +16,8 @@
             fill="solid" 
             placeholder="Email@email.com" 
             [(ngModel)]="email"
-            type="email">
+            type="email"
+            style="color: black;"> <!-- Color del texto dentro del input -->
           </ion-input>
         </ion-label>
       </ion-item>
@@ -31,7 +31,8 @@
             label-placement="floating" 
             fill="solid" 
             placeholder="**********" 
-            [(ngModel)]="password">
+            [(ngModel)]="password"
+            style="color: black;"> <!-- Color del texto dentro del input -->
           </ion-input>
         </ion-label>
       </ion-item>
@@ -45,7 +46,8 @@
             label-placement="floating" 
             fill="solid" 
             placeholder="**********" 
-            [(ngModel)]="confirmPassword">
+            [(ngModel)]="confirmPassword"
+            style="color: black;"> <!-- Color del texto dentro del input -->
           </ion-input>
         </ion-label>
       </ion-item>
@@ -59,6 +61,7 @@
         color="secondary">
         <strong>Registrarme</strong>
       </ion-button>
+      
       <p class="info-message">
         Para hacerte una cuenta de profesor, el correo debe terminar con <strong>&commat;profesorduoc.com</strong>, y para alumnos, con <strong>&commat;alumnoduoc.com</strong>.
       </p>
