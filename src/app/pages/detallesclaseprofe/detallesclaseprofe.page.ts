@@ -9,14 +9,14 @@ import { ClaseService } from 'src/app/services/clase.service';
   styleUrls: ['./detallesclaseprofe.page.scss'],
 })
 export class DetallesclaseprofePage implements OnInit {
-  clase: any = {}; // Inicializamos como un objeto vacío
+  clase: any = {}; // Detalles de la clase
   asistentesDetalles: any[] = []; // Lista de asistentes con detalles
-  profesorDetalles: any; // Detalles del profesor
+  profesorDetalles: any = {}; // Detalles del profesor
 
   constructor(
     private route: ActivatedRoute,
     private claseService: ClaseService,
-    private AuthService: AuthService
+    private authService: AuthService
   ) {}
 
   async ngOnInit() {
@@ -25,17 +25,20 @@ export class DetallesclaseprofePage implements OnInit {
       // Obtén los detalles de la clase
       this.clase = await this.claseService.obtenerClasePorCodigo(codigo);
 
-      // Verificamos si la clase tiene asistentes antes de intentar cargar sus detalles
-      if (this.clase.asistentes && this.clase.asistentes.length > 0) {
-        // Obtén los detalles de cada asistente
+      // Obtén los detalles de cada asistente si existen
+      if (this.clase?.asistentes && this.clase.asistentes.length > 0) {
         for (const uid of this.clase.asistentes) {
-          const usuario = await this.AuthService.getUserInfo(uid);
-          this.asistentesDetalles.push(usuario);
+          const usuario = await this.authService.getUserInfo(uid);
+          if (usuario) {
+            this.asistentesDetalles.push(usuario);
+          }
         }
-        if (this.clase.profesor_id) {
-          this.profesorDetalles = await this.AuthService.getUserInfo(this.clase.profesor_id);
+      }
+
+      // Obtén los detalles del profesor si el `profesor_id` está disponible
+      if (this.clase.profesor_id) {
+        this.profesorDetalles = await this.authService.getUserInfo(this.clase.profesor_id);
       }
     }
   }
-}
 }

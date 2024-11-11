@@ -12,7 +12,7 @@
         <p><strong>Fecha:</strong> {{ clase?.['fecha-hora']?.toDate() | date: 'dd/MM/yyyy HH:mm' }}</p>
       </div>
       <div class="detail">
-        <p><strong>Profesor:</strong> {{ profesorDetalles?.nombre }} {{ profesorDetalles?.apellido_paterno }}</p>
+        <p><strong>Profesor:</strong> {{ profesorDetalles?.nombre || '' }} {{ profesorDetalles?.apellido_paterno || '' }}</p>
       </div>
       <div class="detail">
         <p><strong>Código de Clase:</strong> {{ clase?.codigo }}</p>
@@ -21,7 +21,7 @@
       <h2 class="sub-title">Asistentes</h2>
       <ion-list>
         <ion-item *ngFor="let asistente of asistentesDetalles" class="assistant-item">
-          <p>{{ asistente.nombre }} {{ asistente.segundo_nombre }} {{ asistente.apellido_paterno }} {{ asistente.apellido_materno }}</p>
+          <p>{{ asistente.nombre }} {{ asistente.segundo_nombre || '' }} {{ asistente.apellido_paterno || '' }} {{ asistente.apellido_materno || '' }}</p>
         </ion-item>
       </ion-list>
     </ion-card-content>

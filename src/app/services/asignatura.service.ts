@@ -58,36 +58,46 @@ export class AsignaturaService {
     return asignaturaData; // Retorna la información de la asignatura
   }
   // Método para obtener los nombres de los alumnos
-  async obtenerAlumnosPorUids(uids: string[]) {
-    const alumnos: string[] = [];
-    for (const uid of uids) {
-      const alumnoRef = doc(this.db, 'usuario', uid); // Accede a la colección 'Usuario'
-      const alumnoDoc = await getDoc(alumnoRef);
-      if (alumnoDoc.exists()) {
-        // Extrae el nombre completo del alumno
-        const data = alumnoDoc.data();
-        const nombreCompleto = `${data['nombre']} ${data['segundo_nombre'] || ''} ${data['apellido_paterno']} ${data['apellido_materno']}`.trim();
-        alumnos.push(nombreCompleto); // Agrega el nombre completo a la lista
-      }
-    }
-    return alumnos;
+// Método para obtener los nombres de los alumnos
+async obtenerAlumnosPorUids(uids: string[]) {
+  if (!uids || uids.length === 0) {
+    return []; // Retorna un array vacío si uids es undefined o vacío
   }
 
-  // Método para obtener los nombres de los profesores
-  async obtenerProfesoresPorUids(uids: string[]) {
-    const profesores: string[] = [];
-    for (const uid of uids) {
-      const profesorRef = doc(this.db, 'usuario', uid); // Accede a la colección 'Usuario'
-      const profesorDoc = await getDoc(profesorRef);
-      if (profesorDoc.exists()) {
-        // Extrae el nombre completo del profesor
-        const data = profesorDoc.data();
-        const nombreCompleto = `${data['nombre']} ${data['segundo_nombre'] || ''} ${data['apellido_paterno']} ${data['apellido_materno']}`.trim();
-        profesores.push(nombreCompleto); // Agrega el nombre completo a la lista
-      }
+  const alumnos: string[] = [];
+  for (const uid of uids) {
+    const alumnoRef = doc(this.db, 'usuario', uid); // Accede a la colección 'usuario'
+    const alumnoDoc = await getDoc(alumnoRef);
+    if (alumnoDoc.exists()) {
+      // Extrae el nombre completo del alumno
+      const data = alumnoDoc.data();
+      const nombreCompleto = `${data['nombre']} ${data['segundo_nombre'] || ''} ${data['apellido_paterno']} ${data['apellido_materno']}`.trim();
+      alumnos.push(nombreCompleto); // Agrega el nombre completo a la lista
     }
-    return profesores;
   }
+  return alumnos;
+}
+
+// Método para obtener los nombres de los profesores
+async obtenerProfesoresPorUids(uids: string[]) {
+  if (!uids || uids.length === 0) {
+    return []; // Retorna un array vacío si uids es undefined o vacío
+  }
+
+  const profesores: string[] = [];
+  for (const uid of uids) {
+    const profesorRef = doc(this.db, 'usuario', uid); // Accede a la colección 'usuario'
+    const profesorDoc = await getDoc(profesorRef);
+    if (profesorDoc.exists()) {
+      // Extrae el nombre completo del profesor
+      const data = profesorDoc.data();
+      const nombreCompleto = `${data['nombre']} ${data['segundo_nombre'] || ''} ${data['apellido_paterno']} ${data['apellido_materno']}`.trim();
+      profesores.push(nombreCompleto); // Agrega el nombre completo a la lista
+    }
+  }
+  return profesores;
+}
+
   async obtenerAsignaturasYAsistencia(alumnoId: string): Promise<any> {
     try {
       // Mostrar la pantalla de carga

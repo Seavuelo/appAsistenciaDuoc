@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'; 
-import { Firestore, doc, getDoc, setDoc} from '@angular/fire/firestore'; 
+import { Firestore, doc, getDoc, setDoc, getDocs, writeBatch, arrayUnion, collection} from '@angular/fire/firestore'; 
 import { Router } from '@angular/router'; // Importa Router
 import { Storage } from '@ionic/storage-angular';
 import { NavigationService } from './Navigation.Service';
@@ -26,39 +26,65 @@ getCurrentUserUid(): string | null {
   const user = this.auth.currentUser;
   return user ? user.uid : null; // Retorna el UID si el usuario está autenticado, de lo contrario null
 }
-  async register(email: string, password: string) {
-    await this.NavigationService.presentLoading('Cargando datos...');
+async register(email: string, password: string) {
+  await this.NavigationService.presentLoading('Cargando datos...');
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-      console.log(`Usuario registrado: ${email}`);
-      
-      // Definir el rol basado en el correo institucional
-      let rol: string;
-      if (email.endsWith('@alumnoduoc.com')) {
-        rol = 'Alumno';
-      } else if (email.endsWith('@profesorduoc.com')) {
-        rol = 'Profesor';
-      } else {
-        rol = 'Invitado'; // O cualquier rol por defecto si no coincide
-      } 
+  try {
+    const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+    const uid = userCredential.user.uid;
+    console.log(`Usuario registrado: ${email}`);
+    
+    // Definir el rol basado en el correo institucional
+    let rol: string;
+    if (email.endsWith('@alumnoduoc.com')) {
+      rol = 'Alumno';
+    } else if (email.endsWith('@profesorduoc.com')) {
+      rol = 'Profesor';
+    } else {
+      rol = 'Invitado'; // O cualquier rol por defecto si no coincide
+    }
+    const nombre = email.split('@')[0]; // Obtiene el texto antes de "@"
 
-      // Crear el objeto de usuario
-      const userInfo = {
-        correo_institucional: email,
-        rol: rol,
-        apellido_materno: '', // Vacío por defecto
-        apellido_paterno: '', // Vacío por defecto
-        correo_personal: '',  // Vacío por defecto
-        nombre: '',           // Vacío por defecto
-        segundo_nombre: '',   // Vacío por defecto
-        // Aquí puedes agregar más campos si es necesario
-      };
+    // Crear el objeto de usuario
+    const userInfo = {
+      correo_institucional: email,
+      rol: rol,
+      apellido_materno: '', // Vacío por defecto
+      apellido_paterno: '', // Vacío por defecto
+      correo_personal: '',  // Vacío por defecto
+      nombre: nombre,           // Vacío por defecto
+      segundo_nombre: '',   // Vacío por defecto
+      // Aquí puedes agregar más campos si es necesario
+    };
 
-      // Guardar la información del usuario en Firestore con su UID como ID
-      await setDoc(doc(this.db, 'usuario', userCredential.user.uid), userInfo);
-      
-      return { success: true, user: userCredential.user };
+    // Guardar la información del usuario en Firestore con su UID como ID
+    await setDoc(doc(this.db, 'usuario', uid), userInfo);
+
+    // Obtener todos los documentos de la colección 'asignatura'
+    const asignaturasSnapshot = await getDocs(collection(this.db, 'asignatura'));
+
+    // Recorrer cada documento en 'asignatura' y actualizar el campo correspondiente
+    const batch = writeBatch(this.db); // Usamos un batch para realizar todas las operaciones de escritura de una vez
+
+    asignaturasSnapshot.forEach((doc) => {
+      const asignaturaRef = doc.ref;
+      if (rol === 'Alumno') {
+        // Si el rol es Alumno, agrega el UID al array 'alumnos'
+        batch.update(asignaturaRef, {
+          alumnos: arrayUnion(uid)
+        });
+      } else if (rol === 'Profesor') {
+        // Si el rol es Profesor, establece el 'profesor_id'
+        batch.update(asignaturaRef, {
+          profesor_id: arrayUnion(uid)
+        });
+      }
+    });
+
+    // Ejecuta el batch de actualizaciones
+    await batch.commit();
+
+    return { success: true, user: userCredential.user };
   } catch (error: any) {
     // Si ocurre un error, retorna el error
     return { success: false, message: error.code };
@@ -67,6 +93,7 @@ getCurrentUserUid(): string | null {
     await this.NavigationService.dismissLoading();
   }
 }
+
 
 async login(email: string, password: string): Promise<any> {
   // Muestra el indicador de carga
