@@ -16,8 +16,9 @@ dependencies {
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-network')
     implementation project(':capacitor-status-bar')
+
 }
-apply from: "../../node_modules/@starley/barcodescanner-sdk31/src/android/barcodescanner.gradle"
+
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

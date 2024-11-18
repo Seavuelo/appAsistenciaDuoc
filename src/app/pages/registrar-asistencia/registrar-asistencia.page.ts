@@ -55,7 +55,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   
     if (!granted) {
       this.presentAlert('Permiso denegado', 'Para usar la aplicación, autoriza los permisos de cámara.');
-      await this.NavigationService.dismissLoading();
+      await this.NavigationService.dismissLoading();  // Asegurarse de que se cierra en este punto
       return;
     }
   
@@ -64,7 +64,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   
     if (!position) {
       this.presentAlert('Ubicación no permitida', 'No estás dentro del área permitida para registrar asistencia.' + this.locationMessage);
-      await this.NavigationService.dismissLoading();
+      await this.NavigationService.dismissLoading();  // Asegurarse de que se cierra en este punto
       return;
     }
   
@@ -73,7 +73,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   
     if (barcodes.length === 0) {
       this.presentAlert('QR inválido', 'No se detectó ningún código QR.');
-      await this.NavigationService.dismissLoading();
+      await this.NavigationService.dismissLoading();  // Asegurarse de que se cierra en este punto
       return;
     }
   
@@ -82,49 +82,42 @@ export class RegistrarAsistenciaPage implements OnInit {
   
     if (!alumnoId) {
       this.presentAlert('Error', 'No se ha podido obtener el ID del usuario. Asegúrate de estar autenticado.');
-      await this.NavigationService.dismissLoading();
+      await this.NavigationService.dismissLoading();  // Asegurarse de que se cierra en este punto
       return;
     }
   
     if (!codigoQR || codigoQR.length !== 5) {
       this.presentAlert('QR inválido', 'El código QR escaneado no es válido.');
-      await this.NavigationService.dismissLoading();
+      await this.NavigationService.dismissLoading();  // Asegurarse de que se cierra en este punto
       return;
     }
   
-    // Verifica el estado de la red
     const networkStatus = await Network.getStatus();
     if (!networkStatus.connected) {
-      // Si está desconectado, guarda los datos localmente
       await this.saveOfflineData({ codigoQR, alumnoId, latitude: this.latitude, longitude: this.longitude });
       this.presentAlert('A la espera de conexión', 'Se guardó tu asistencia localmente. Se enviará cuando haya conexión.');
-      await this.NavigationService.dismissLoading();
+      await this.NavigationService.dismissLoading();  // Asegurarse de que se cierra en este punto
       return;
     }
   
-    // Si está en línea, procesa el QR como de costumbre
-    await this.processQR(codigoQR, alumnoId);
-    await this.NavigationService.dismissLoading();
+    await this.processQR(codigoQR, alumnoId);  // Se llama a `processQR`
   }
   
-
   async processQR(codigoQR: string, alumnoId: string) {
     try {
-      await this.NavigationService.presentLoading('Cargando datos...');
-  
       const claseRef = doc(this.firestore, `clase/${codigoQR}`);
       const claseSnap = await getDoc(claseRef);
   
       if (!claseSnap.exists()) {
         await this.presentAlert('QR inválido', 'El código QR no corresponde a ninguna clase.');
-        return;  // Salir antes de continuar
+        return;
       }
   
       const claseData = claseSnap.data();
   
       if (claseData['asistentes'] && claseData['asistentes'].includes(alumnoId)) {
         await this.presentAlert('Ya estás presente', 'Ya estás registrado en esta clase.');
-        return;  // Salir antes de continuar
+        return;
       }
   
       await updateDoc(claseRef, {
@@ -136,10 +129,11 @@ export class RegistrarAsistenciaPage implements OnInit {
       console.error('Error al procesar QR:', error);
       await this.presentAlert('Error', 'Hubo un problema al registrar tu asistencia. Intenta nuevamente.');
     } finally {
-      // Siempre cerrar el loading spinner
+      // Asegúrate de cerrar el cuadro de carga al final del proceso
       await this.NavigationService.dismissLoading();
     }
   }
+  
   
 
   async saveOfflineData(data: any) {

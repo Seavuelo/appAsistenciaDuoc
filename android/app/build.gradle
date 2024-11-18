@@ -5,7 +5,7 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
       signingConfigs {
         release { 
-            storeFile file("C:/Users/CETECOM/Documents/appasistencia/appAsistenciaDuoc/android/my-release-key.keystore") // Reemplaza con el nombre de tu archivo keystore
+            storeFile file("D:/Proyectos/AplicacionFinalDios/asistenciaApp2/android/my-release-key.keystore") // Reemplaza con el nombre de tu archivo keystore
             storePassword "winipoo1" // Cambia esto por tu contraseña del keystore
             keyAlias "seavuelo" // Cambia esto por el alias que has usado
             keyPassword "winipoo1" // Cambia esto por la contraseña del alias

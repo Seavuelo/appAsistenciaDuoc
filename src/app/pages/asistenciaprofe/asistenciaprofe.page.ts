@@ -29,6 +29,11 @@ export class AsistenciaprofePage implements OnInit {
     // Cargar las clases por cada asignatura_id
     for (const asignatura of this.asignaturas) {
       const clases = await this.claseService.obtenerClasesPorAsignatura(asignatura.asignatura_id);
+
+      // Ordenar las clases de menor a mayor según 'fecha-hora'
+      clases.sort((a, b) => a['fecha-hora'].toDate() - b['fecha-hora'].toDate());
+
+      // Asignar las clases ordenadas a la propiedad 'clases' usando el 'asignatura_id'
       this.clases[asignatura.asignatura_id] = clases;
     }
   }
