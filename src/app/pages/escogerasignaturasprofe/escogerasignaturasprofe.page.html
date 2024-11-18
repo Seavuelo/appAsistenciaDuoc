@@ -2,6 +2,11 @@
 
 <ion-content>
   <!-- Lista de asignaturas -->
+  <ion-card color="primary" class="card">
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>Seleccione sus Asignaturas👇</ion-card-title>
+    </ion-card-header>
+  </ion-card>
   <ion-list lines="none">
     <ion-item *ngFor="let asignatura of asignaturas">
       <ion-label>
@@ -19,14 +24,13 @@
   </ion-list>
 
   <!-- Botón guardar cambios -->
-  <ion-button expand="full" (click)="guardarCambios()" color="primary" class="save-btn">
-    Guardar cambios
-  </ion-button>
-
-  <!-- Botón flotante para agregar asignaturas -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary" [routerLink]="['/crearasignaturaprofe']">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <ion-footer>
+    <ion-button expand="full" color="primary" [routerLink]="['/crearasignaturaprofe']">
+      Crear Asignaturas
+    </ion-button>
+    <ion-button expand="full" (click)="guardarCambios()" color="secondary" class="save-btn">
+      Guardar cambios
+    </ion-button>
+  
+  </ion-footer>
 </ion-content>
