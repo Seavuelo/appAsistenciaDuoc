@@ -1,0 +1,63 @@
+ion-content {
+    --background: #f8f8f8; /* Fondo más suave para la página */
+  }
+  
+  ion-list {
+    padding-top: 20px; /* Agrega espacio al principio */
+    padding-bottom: 20px; /* Agrega espacio al final */
+    margin-bottom: 80px; /* Se da espacio debajo para que no quede pegado al botón de guardar */
+
+  }
+  
+  ion-item {
+    background-color: white; /* Fondo blanco para los items */
+    border-radius: 10px; /* Bordes redondeados */
+    margin-bottom: 10px; /* Espaciado entre los items */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    transition: transform 0.3s ease; /* Animación de hover */
+    display: flex;
+    align-items: center;
+  }
+  
+  ion-item:hover {
+    transform: translateY(-3px); /* Efecto de elevación */
+  }
+  
+  ion-label h2 {
+    font-size: 18px; /* Tamaño de fuente para el nombre de la asignatura */
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+  }
+  
+  ion-label p {
+    font-size: 14px; /* Tamaño de fuente para la ID */
+    color: #ffffff; /* Color más suave para la ID */
+    margin: 4px 0;
+  }
+  
+  ion-checkbox {
+    --padding-start: 12px;
+  }
+  
+  ion-button {
+    margin-top: 20px;
+    border-radius: 20px; /* Bordes redondeados para el botón */
+    font-weight: bold;
+    font-size: 16px; /* Mejor legibilidad */
+    transition: background-color 0.3s ease;
+  }
+  
+  ion-button:hover {
+    background-color: #3b5998; /* Un tono más oscuro al pasar el mouse */
+  }
+  
+  .save-btn {
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+
+  ion-fab {
+    margin-bottom: 20px; /* Espacio desde el borde inferior */
+    margin-right: 20px; /* Espacio desde el borde derecho */
+  }

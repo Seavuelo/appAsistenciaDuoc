@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Firestore,doc, getDoc, collection, getDocs, query, where, deleteDoc } from '@angular/fire/firestore';
+import { Firestore,doc, getDoc, collection, getDocs, query, where, deleteDoc, arrayRemove, arrayUnion, updateDoc, addDoc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { NavigationService } from './Navigation.Service';
+import { AlertController } from '@ionic/angular'; // Asegúrate de tener este import
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AsignaturaService {
-  constructor(private db: Firestore, private authService: AuthService, private NavigationService: NavigationService) {}
+  constructor(private db: Firestore, private authService: AuthService, private NavigationService: NavigationService, private AlertController:AlertController) {}
 
   async obtenerAsignaturasPorUsuario() {
     const uid = this.authService.getCurrentUserUid(); // Obtener el UID del usuario actual
@@ -192,5 +194,192 @@ async obtenerProfesoresPorUids(uids: string[]) {
       console.error("Error al eliminar la clase:", error);
     });
   }
+
+
+  async obtenerTodasAsignaturas() {
+    const asignaturasRef = collection(this.db, 'asignatura');
+    const querySnapshot = await getDocs(asignaturasRef);
+    const asignaturas: any[] = [];
+    querySnapshot.forEach((doc) => {
+      asignaturas.push({ id: doc.id, ...doc.data() });
+    });
+    return asignaturas;
+  }
+
+  async obtenerAsignaturasPorProfesor() {
+    const uid = this.authService.getCurrentUserUid();
+    if (!uid) {
+      return []; // Si no hay un usuario, retorna un array vacío
+    }
+
+    const asignaturasRef = collection(this.db, 'asignatura');
+    const querySnapshot = await getDocs(asignaturasRef);
+    const asignaturas: any[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const asignaturaData = doc.data();
+      if (asignaturaData['profesor_id'] && asignaturaData['profesor_id'].includes(uid)) {
+        asignaturas.push({ id: doc.id, ...asignaturaData });
+      }
+    });
+
+    return asignaturas;
+  }
+
+  // Actualizar la asignación del profesor a una asignatura
+  updateAsignaturaProfesor(asignaturaId: string, profesorId: string, isAssigned: boolean) {
+    const asignaturaRef = doc(this.db, `asignatura/${asignaturaId}`);
+    if (isAssigned) {
+      return updateDoc(asignaturaRef, {
+        profesor_id: arrayUnion(profesorId)
+      });
+    } else {
+      return updateDoc(asignaturaRef, {
+        profesor_id: arrayRemove(profesorId)
+      });
+    }
+  }
+  async crearAsignatura(asignatura: any) {
+    try {
+      // Agregar el documento a la colección 'asignaturas'
+      const asignaturasCollection = collection(this.db, 'asignatura');
+      await addDoc(asignaturasCollection, asignatura);
+      console.log('Asignatura creada con éxito');
+    } catch (error) {
+      console.error('Error al crear la asignatura:', error);
+    }
+  }
+  async eliminarAsignatura(asignaturaId: string) {
+    try {
+      // Verificar cuántas asignaturas hay en la base de datos
+      const asignaturasRef = collection(this.db, 'asignatura');
+      const querySnapshot = await getDocs(asignaturasRef);
   
+      if (querySnapshot.size <= 1) {
+        // Si solo queda una asignatura, mostrar el mensaje de advertencia y no permitir eliminar
+        const alert = await this.AlertController.create({
+          header: 'Advertencia',
+          message: 'El establecimiento no permite quedarse con 0 asignaturas.',
+          buttons: ['OK']
+        });
+  
+        await alert.present();
+  
+        // Cerrar la alerta después de 1 segundo
+        setTimeout(() => {
+          alert.dismiss();
+        }, 1000);
+  
+        console.log("No se puede eliminar la última asignatura.");
+        return; // No continuar con la eliminación
+      }
+  
+      // Si hay más de una asignatura, proceder con la eliminación
+      const asignaturasRefDoc = collection(this.db, 'asignatura');
+      const q = query(asignaturasRefDoc, where("asignatura_id", "==", asignaturaId));
+      const querySnapshotDocs = await getDocs(q);
+  
+      if (querySnapshotDocs.empty) {
+        console.log("La asignatura no existe");
+        return;
+      }
+  
+      // Obtener el documento de asignatura
+      const asignaturaDoc = querySnapshotDocs.docs[0];
+      const asignaturaDocId = asignaturaDoc.id; // ID del documento de Firestore
+  
+      // Eliminar la asignatura usando el ID de Firestore
+      const asignaturaRef = doc(this.db, 'asignatura', asignaturaDocId);
+      await deleteDoc(asignaturaRef);
+  
+      console.log(`Asignatura con ID ${asignaturaDocId} eliminada con éxito`);
+  
+      // Ahora puedes proceder a eliminar las clases relacionadas
+      await this.eliminarClasesPorAsignaturaId(asignaturaId);
+  
+    } catch (error) {
+      console.error('Error al eliminar la asignatura:', error);
+    }
+  }
+  async eliminarClasesPorAsignaturaId(asignaturaId: string) {
+    try {
+      const clasesRef = collection(this.db, 'clase');
+      const q = query(clasesRef, where("asignatura_id", "==", asignaturaId));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          // Eliminar cada clase asociada a la asignatura
+          await deleteDoc(doc.ref);
+          console.log(`Clase con ID ${doc.id} eliminada`);
+        });
+      } else {
+        console.log('No se encontraron clases asociadas a esta asignatura');
+      }
+    } catch (error) {
+      console.error('Error al eliminar las clases:', error);
+    }
+  
+  } 
+  async actualizarAsignaturaAlumno(asignaturaId: string, alumnoId: string, isSelected: boolean) {
+    // Referencia a la colección 'asignatura'
+    const asignaturasRef = collection(this.db, 'asignatura');
+  
+    // Buscar la asignatura por el campo 'asignatura_id'
+    const q = query(asignaturasRef, where("asignatura_id", "==", asignaturaId));
+    const querySnapshot = await getDocs(q);
+  
+    if (querySnapshot.empty) {
+      console.log(`No se encontró la asignatura con ID ${asignaturaId}`);
+      return;
+    }
+  
+    // Obtener la primera asignatura que coincida con el 'asignatura_id'
+    const asignaturaDoc = querySnapshot.docs[0];
+    const asignaturaRef = doc(this.db, 'asignatura', asignaturaDoc.id); // Obtenemos el ID de Firestore
+  
+    try {
+      // Obtener los datos de la asignatura
+      const asignaturaData = asignaturaDoc.data();
+      const alumnosInscritos = asignaturaData['alumnos'] || []; // Si no hay alumnos, es un array vacío
+  
+      if (isSelected) {
+        // Si el alumno selecciona la asignatura, lo agregamos a la lista de alumnos inscritos
+        if (!alumnosInscritos.includes(alumnoId)) {
+          await updateDoc(asignaturaRef, {
+            alumnos: arrayUnion(alumnoId)
+          });
+          console.log(`Alumno con ID ${alumnoId} agregado a la asignatura ${asignaturaId}`);
+        } else {
+          console.log(`El alumno con ID ${alumnoId} ya está inscrito en la asignatura ${asignaturaId}`);
+        }
+      } else {
+        // Si el alumno deselecciona la asignatura, lo eliminamos de la lista
+        if (alumnosInscritos.includes(alumnoId)) {
+          await updateDoc(asignaturaRef, {
+            alumnos: arrayRemove(alumnoId)
+          });
+          console.log(`Alumno con ID ${alumnoId} eliminado de la asignatura ${asignaturaId}`);
+        } else {
+          console.log(`El alumno con ID ${alumnoId} no está inscrito en la asignatura ${asignaturaId}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error al actualizar la asignatura para el alumno:', error);
+    }
+  }
+  async obtenerAsignaturasPorAlumno(alumnoId: string) {
+    const asignaturasRef = collection(this.db, 'asignatura');
+    const querySnapshot = await getDocs(asignaturasRef);
+    const asignaturasInscritas: any[] = [];
+  
+    querySnapshot.forEach((doc) => {
+      const asignaturaData = doc.data();
+      if (asignaturaData['alumnos'] && asignaturaData['alumnos'].includes(alumnoId)) {
+        asignaturasInscritas.push({ ...asignaturaData, asignatura_id: asignaturaData['asignatura_id'] });
+      }
+    });
+  
+    return asignaturasInscritas || [];  // Asegurarse de que siempre retorne un array
+  }
 }

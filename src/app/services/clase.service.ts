@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
+import { Firestore, collection, query, where, getDocs, doc, deleteDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +7,6 @@ import { Router } from '@angular/router';
 export class ClaseService {
   constructor(
     private firestore: Firestore,
-    private router: Router
   ) {}
 
   async obtenerClasesPorAsignatura(asignatura_id: string) {
@@ -30,5 +28,5 @@ export class ClaseService {
     const claseData = querySnapshot.docs[0].data(); // Asume que `codigo` es único
     return claseData;
   }
-  
+
 }

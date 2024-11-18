@@ -11,7 +11,17 @@ export class AsignaturasprofePage implements OnInit {
 
   constructor(private asignaturaService: AsignaturaService) {}
 
-  async ngOnInit() {
+  ngOnInit() {
+
+  }
+
+  async ionViewWillEnter() {
+    this.cargarAsignaturas();
+
+    
+  }
+
+  async cargarAsignaturas() {
     this.asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario();
   }
 }

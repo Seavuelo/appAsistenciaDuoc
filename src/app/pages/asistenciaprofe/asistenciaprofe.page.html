@@ -15,8 +15,10 @@
       <ion-card-title>{{ item.nombre }}</ion-card-title>
       <ion-card-subtitle>Aula: {{ item.aula }}</ion-card-subtitle>
       <ion-card-subtitle>Horario: {{ item.horario }}</ion-card-subtitle>
-      <ion-icon name="chevron-down" *ngIf="!item.showClases"></ion-icon>
-      <ion-icon name="chevron-up" *ngIf="item.showClases"></ion-icon>
+
+      <!-- Flechitas para abrir/cerrar -->
+      <ion-icon name="chevron-down" *ngIf="!item.showClases" class="toggle-icon"></ion-icon>
+      <ion-icon name="chevron-up" *ngIf="item.showClases" class="toggle-icon"></ion-icon>
     </ion-card-header>
 
     <!-- Lista de clases (fechas) de la asignatura -->

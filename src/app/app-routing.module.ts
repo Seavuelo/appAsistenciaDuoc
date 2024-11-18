@@ -70,6 +70,18 @@ const routes: Routes = [
     path: 'detallesclaseprofe',
     loadChildren: () => import('./pages/detallesclaseprofe/detallesclaseprofe.module').then( m => m.DetallesclaseprofePageModule)
   },
+  {
+    path: 'escogerasignaturasprofe',
+    loadChildren: () => import('./pages/escogerasignaturasprofe/escogerasignaturasprofe.module').then( m => m.EscogerasignaturasprofePageModule)
+  },
+  {
+    path: 'escogerasignaturas',
+    loadChildren: () => import('./pages/escogerasignaturas/escogerasignaturas.module').then( m => m.EscogerasignaturasPageModule)
+  },
+  {
+    path: 'crearasignaturaprofe',
+    loadChildren: () => import('./pages/crearasignaturaprofe/crearasignaturaprofe.module').then( m => m.CrearasignaturaprofePageModule)
+  },
 
 
   

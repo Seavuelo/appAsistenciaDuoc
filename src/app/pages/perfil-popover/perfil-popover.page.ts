@@ -15,6 +15,10 @@ export class PerfilPopoverPage {
     this.navCtrl.navigateForward('/perfil'); // Reemplaza '/perfil' con la ruta de tu página de perfil
     await this.popoverController.dismiss(); // Cierra el popover
   }
+  async goToAsignaturas() {
+    this.navCtrl.navigateForward('/escogerasignaturas'); // Reemplaza '/perfil' con la ruta de tu página de perfil
+    await this.popoverController.dismiss(); // Cierra el popover
+  }
 
   async logOut() {
     const alert = await this.alertController.create({

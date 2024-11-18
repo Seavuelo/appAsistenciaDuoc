@@ -1,0 +1,32 @@
+<app-encabezado></app-encabezado>
+
+<ion-content>
+  <!-- Lista de asignaturas -->
+  <ion-list lines="none">
+    <ion-item *ngFor="let asignatura of asignaturas">
+      <ion-label>
+        <h2>{{ asignatura.nombre }}</h2>
+        <p>ID: {{ asignatura.asignatura_id }}</p>
+      </ion-label>
+      <ion-checkbox 
+        slot="start" 
+        [(ngModel)]="asignatura.isSelected">
+      </ion-checkbox>
+      <ion-button fill="clear" color="danger" (click)="confirmarEliminacion(asignatura.asignatura_id)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- Botón guardar cambios -->
+  <ion-button expand="full" (click)="guardarCambios()" color="primary" class="save-btn">
+    Guardar cambios
+  </ion-button>
+
+  <!-- Botón flotante para agregar asignaturas -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" [routerLink]="['/crearasignaturaprofe']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
