@@ -1,12 +1,25 @@
-#header{
-    height: 15%;
-    background:#F2A900;
-    border-radius: 0 0 20px 20px;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    padding: 20px;
+ion-header {
+  height: 0%;              /* Controla la altura del header */
+  display: flex;
+  flex-direction: column;
+  color: #fff;              /* Color del texto dentro del header */
+  padding: 0px;  
+  border: none;
+  box-shadow: none;
+  background: none;          /* Espaciado interno */
 }
+
+
+#tilin{
+  height: 15%;
+  background:#F2A900;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  padding: 20px;
+}
+
 
 .card{
     margin-top: -2.5rem;

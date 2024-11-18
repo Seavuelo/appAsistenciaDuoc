@@ -8,6 +8,16 @@
     padding: 20px;
 }
 
+ion-header {
+    height: 0%;              /* Controla la altura del header */
+    display: flex;
+    flex-direction: column;
+    color: #fff;              /* Color del texto dentro del header */
+    padding: 0px;  
+    border: none;
+    box-shadow: none;
+    background: none;          /* Espaciado interno */
+  }
 .card{
     margin-top: -2.5rem;
 }

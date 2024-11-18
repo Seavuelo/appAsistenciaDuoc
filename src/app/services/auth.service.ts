@@ -52,37 +52,13 @@ async register(email: string, password: string) {
       apellido_materno: '', // Vacío por defecto
       apellido_paterno: '', // Vacío por defecto
       correo_personal: '',  // Vacío por defecto
-      nombre: nombre,           // Vacío por defecto
+      nombre: nombre,       // Nombre basado en la parte antes de "@"
       segundo_nombre: '',   // Vacío por defecto
       // Aquí puedes agregar más campos si es necesario
     };
 
     // Guardar la información del usuario en Firestore con su UID como ID
     await setDoc(doc(this.db, 'usuario', uid), userInfo);
-
-    // Obtener todos los documentos de la colección 'asignatura'
-    const asignaturasSnapshot = await getDocs(collection(this.db, 'asignatura'));
-
-    // Recorrer cada documento en 'asignatura' y actualizar el campo correspondiente
-    const batch = writeBatch(this.db); // Usamos un batch para realizar todas las operaciones de escritura de una vez
-
-    asignaturasSnapshot.forEach((doc) => {
-      const asignaturaRef = doc.ref;
-      if (rol === 'Alumno') {
-        // Si el rol es Alumno, agrega el UID al array 'alumnos'
-        batch.update(asignaturaRef, {
-          alumnos: arrayUnion(uid)
-        });
-      } else if (rol === 'Profesor') {
-        // Si el rol es Profesor, establece el 'profesor_id'
-        batch.update(asignaturaRef, {
-          profesor_id: arrayUnion(uid)
-        });
-      }
-    });
-
-    // Ejecuta el batch de actualizaciones
-    await batch.commit();
 
     return { success: true, user: userCredential.user };
   } catch (error: any) {

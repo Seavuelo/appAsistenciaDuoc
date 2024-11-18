@@ -13,13 +13,16 @@ export class AppComponent implements OnInit {
     // Inicialización de Firebase
     const app = initializeApp(environment.firebase);
     console.log('Firebase initialized:', app);
-  }
+    this.initializeApp();
 
-  ngOnInit() {
-    // Asegurarse de que el modo oscuro está desactivado y siempre usar el modo claro
-    this.platform.ready().then(() => {
-      // Forzar el modo claro en todas las plataformas
-      document.documentElement.setAttribute('data-theme', 'light');
-    });
   }
+ngOnInit() {
+  
+}
+initializeApp() {
+  this.platform.ready().then(() => {
+    // Forzar el modo oscuro
+    document.body.classList.add('dark');
+  });
+}
 }

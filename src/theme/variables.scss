@@ -64,7 +64,16 @@
 
 }
 
-ion-app {
-	--background: var(--ion-background-color);
-	--color: var(--ion-text-color);
+body.dark {
+	--ion-background-color: #222428;
+	--ion-text-color: #ffffff;
+	--ion-toolbar-background: #222428;
+	--ion-toolbar-text-color: #ffffff;
+	--ion-item-background: #333;
   }
+  
+@media (prefers-color-scheme: dark) {
+	:root {
+		
+	}
+}
