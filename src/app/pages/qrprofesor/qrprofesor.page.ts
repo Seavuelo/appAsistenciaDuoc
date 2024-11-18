@@ -3,10 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Firestore, doc, setDoc, collection, getDocs } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
 import  QRCode  from 'qrcode';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-qrprofesor',
   templateUrl: './qrprofesor.page.html',
@@ -17,13 +16,30 @@ export class QrprofesorPage implements OnInit {
   profesorId!: string;
   codigoQR!: string;
   qrCodeDataUrl!: string;
+  private backButtonSubscription: any;
 
-  constructor(private route: ActivatedRoute, private firestore: Firestore, private authService: AuthService, private navCtrl: NavController,private alertController: AlertController, private router: Router) {}
+
+  constructor(private route: ActivatedRoute, private firestore: Firestore, private authService: AuthService, private navCtrl: NavController,private alertController: AlertController, private router: Router, private Platform:Platform) {}
 
   ngOnInit() {
+    // Obtiene los parámetros de la URL
     this.asignaturaId = this.route.snapshot.paramMap.get('asignatura_id') || '';
     this.profesorId = this.authService.getCurrentUserUid() || ''; // Obtén el UID del profesor
+
+    // Genera el código QR
     this.generarCodigoQR();
+
+    // Intercepta el evento del botón de retroceso
+    this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
+      await this.presentAlertGoBack(); // Llama a la alerta cuando se presiona el botón de retroceso
+    });
+  }
+
+  ngOnDestroy() {
+    // Desuscribe el evento cuando dejas la página
+    if (this.backButtonSubscription) {
+      this.backButtonSubscription.unsubscribe();
+    }
   }
   async presentAlertGoBack() {
     const alert = await this.alertController.create({

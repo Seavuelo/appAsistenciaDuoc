@@ -13,6 +13,9 @@ export class AsistenciaPage implements OnInit {
   constructor(private asignaturaService: AsignaturaService, private authService: AuthService) {}
 
   async ngOnInit() {
+
+  }
+  async ionViewWillEnter() {
     const alumnoId = this.authService.getCurrentUserUid(); // Obtener el UID del alumno actual
     if (alumnoId) {
       try {
@@ -25,5 +28,7 @@ export class AsistenciaPage implements OnInit {
     } else {
       console.error("No se encontró el UID del alumno.");
     }
+
+    
   }
 }
