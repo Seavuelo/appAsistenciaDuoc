@@ -1,5 +1,5 @@
 import { Itemlist } from 'src/app/interfaces/itemlist';
-import { PerfilPopoverPage } from '../perfil-popover/perfil-popover.page'; // Importa el componente
+import { PerfilPopoverPage } from '../perfil-popover/perfil-popover.page'; 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Platform, AlertController, PopoverController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomeprofePage implements OnInit {
   private backButtonSubscription: any;
-  private popover: any; // Guardamos la referencia del popover
+  private popover: any; 
 
   constructor(
     private popoverController: PopoverController,
@@ -22,29 +22,23 @@ export class HomeprofePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Suscripción al botón de retroceso
     this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
-      // Llama a la alerta cuando se presiona el botón de retroceso
       if (this.popover) {
-        // Si el popover está abierto, no hacer nada, solo cerrar el popover
         await this.popover.dismiss();
       } else {
-        // Si no hay popover, muestra la alerta de cierre de sesión
         await this.logOut();
       }
     });
   }
 
   ngOnDestroy() {
-    // Desuscribe el evento cuando dejas la página
     if (this.backButtonSubscription) {
       this.backButtonSubscription.unsubscribe();
     }
   }
 
-
+  //Mostrar el Popover
   async openPopover(event: Event) {
-    // Crear y mostrar el popover
     this.popover = await this.popoverController.create({
       component: PerfilPopoverPage,
       event: event,
@@ -52,8 +46,9 @@ export class HomeprofePage implements OnInit {
     });
     await this.popover.present();
   }
+
+  // Alerta de confirmación para cerrar sesión
   async logOut() {
-    // Alerta de confirmación para cerrar sesión
     const alert = await this.AlertController.create({
       header: '¿Cerrar la Sesión?',
       buttons: [
@@ -62,21 +57,18 @@ export class HomeprofePage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Cierre de sesión cancelado');
           }
         },
         {
           text: 'Sí',
           handler: async () => {
-            await this.AuthService.logOut(); // Llama al método de cierre de sesión
-            console.log('Cerrando sesión...');
-            this.NavController.navigateRoot('/login'); // Redirige al login después de cerrar sesión
+            await this.AuthService.logOut(); 
+            this.NavController.navigateRoot('/login'); 
           }
         }
       ]
     });
-
-    await alert.present(); // Muestra la alerta
+    await alert.present(); 
   }
 
   vinculos: Itemlist[] = [

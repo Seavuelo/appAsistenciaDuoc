@@ -1,4 +1,3 @@
-// perfil.page.ts
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { getAuth } from 'firebase/auth';
@@ -11,8 +10,8 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  userInfo: any = {}; // Almacena la información del usuario
-  isEditing: boolean = false; // Bandera para controlar la edición
+  userInfo: any = {}; 
+  isEditing: boolean = false; 
 
   constructor(private authService: AuthService, private navCtrl: NavController) { }
 
@@ -21,7 +20,7 @@ export class PerfilPage implements OnInit {
     const user = auth.currentUser;
     
     if (user) {
-      this.userInfo = await this.authService.getUserInfo(user.uid); // Obtiene la información del usuario
+      this.userInfo = await this.authService.getUserInfo(user.uid); 
     }
   }
 
@@ -30,15 +29,14 @@ export class PerfilPage implements OnInit {
     if (this.isEditing) {
       const auth = getAuth();
       const user = auth.currentUser;
-
       if (user) {
-        this.authService.updateUserInfo(user.uid, this.userInfo); // Actualiza la información del usuario
+        this.authService.updateUserInfo(user.uid, this.userInfo); 
       }
     }
-    this.isEditing = !this.isEditing; // Cambia el estado de edición
+    this.isEditing = !this.isEditing; 
   }
   goBack() {
-    this.navCtrl.back(); // Navega a la página anterior
+    this.navCtrl.back(); 
   }
-}// Lógica para editar la información del usuario
+}
   

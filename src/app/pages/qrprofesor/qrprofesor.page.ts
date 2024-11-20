@@ -6,11 +6,13 @@ import  QRCode  from 'qrcode';
 import { NavController, Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-qrprofesor',
   templateUrl: './qrprofesor.page.html',
   styleUrls: ['./qrprofesor.page.scss'],
 })
+
 export class QrprofesorPage implements OnInit {
   asignaturaId!: string;
   profesorId!: string;
@@ -18,29 +20,24 @@ export class QrprofesorPage implements OnInit {
   qrCodeDataUrl!: string;
   private backButtonSubscription: any;
 
-
   constructor(private route: ActivatedRoute, private firestore: Firestore, private authService: AuthService, private navCtrl: NavController,private alertController: AlertController, private router: Router, private Platform:Platform) {}
 
   ngOnInit() {
-    // Obtiene los parámetros de la URL
     this.asignaturaId = this.route.snapshot.paramMap.get('asignatura_id') || '';
-    this.profesorId = this.authService.getCurrentUserUid() || ''; // Obtén el UID del profesor
-
-    // Genera el código QR
+    this.profesorId = this.authService.getCurrentUserUid() || ''; 
     this.generarCodigoQR();
-
-    // Intercepta el evento del botón de retroceso
     this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
-      await this.presentAlertGoBack(); // Llama a la alerta cuando se presiona el botón de retroceso
+      await this.presentAlertGoBack();
     });
   }
 
   ngOnDestroy() {
-    // Desuscribe el evento cuando dejas la página
     if (this.backButtonSubscription) {
       this.backButtonSubscription.unsubscribe();
     }
   }
+
+  //La alerta cuando el profesor intenta salir, ya sea con la flecha de retroceso o con el boton de retroceso de Android.
   async presentAlertGoBack() {
     const alert = await this.alertController.create({
       header: '¿Está seguro?',
@@ -51,7 +48,6 @@ export class QrprofesorPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Cancelado');
           },
         },
         {
@@ -62,38 +58,33 @@ export class QrprofesorPage implements OnInit {
         },
       ],
     });
-
     await alert.present();
   }
 
   goBack() {
-    this.navCtrl.back(); // Cambia esto a la ruta a la que quieras regresar
+    this.navCtrl.back(); 
   }
-
 
   async generarCodigoQR() {
     const codigoUnico = this.generarCodigoAleatorio();
     const fechaHora = new Date();
-
-    // Buscar el documento de la asignatura que contiene el asignatura_id
     const asignaturasRef = collection(this.firestore, 'asignatura');
     const querySnapshot = await getDocs(asignaturasRef);
     let asignaturaNombre = '';
-
     querySnapshot.forEach(doc => {
       const data = doc.data();
       if (data['asignatura_id'] === this.asignaturaId) {
-        asignaturaNombre = data['nombre']; // Cambia 'nombre' por el campo que tengas para el nombre de la asignatura
+        asignaturaNombre = data['nombre']; 
       }
     });
-
     if (!asignaturaNombre) {
       console.error('No se encontró el documento de la asignatura con ID:', this.asignaturaId);
-      return; // Detener si no se encuentra la asignatura
+      return; 
     }
-
     const claseRef = doc(this.firestore, `clase/${codigoUnico}`);
 
+
+    //Crea en la base de datos una clase con todos los datos del QR
     await setDoc(claseRef, {
       asignatura: asignaturaNombre,
       asignatura_id: this.asignaturaId,
@@ -102,16 +93,19 @@ export class QrprofesorPage implements OnInit {
       profesor_id: this.profesorId,
       codigo: codigoUnico
     });
-
-    this.codigoQR = codigoUnico; // Guarda el código para mostrar en el QR
+    this.codigoQR = codigoUnico; 
     this.generarQRCode(this.codigoQR);
   }
 
+
+  //Generar codigo unico del QR para guardarlo como Clase
   generarCodigoAleatorio(): string {
     const codigo = Math.floor(10000 + Math.random() * 90000).toString();
     return codigo;
   }
 
+
+  //Genera la imagen QR
   async generarQRCode(data: string) {
     try {
       this.qrCodeDataUrl = await QRCode.toDataURL(data);

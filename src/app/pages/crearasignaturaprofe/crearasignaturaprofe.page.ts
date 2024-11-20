@@ -19,13 +19,10 @@ export class CrearasignaturaprofePage implements OnInit {
   ngOnInit() {}
 
 
-
+  //Para Crear la Asignatura
   async crearAsignatura() {
-    // Validar si los campos están completos y son válidos
     if (this.nombre && this.horario && this.aula) {
-      // Crear un ID de asignatura único
       const asignaturaId = this.generarIdAsignatura();
-
       const nuevaAsignatura = {
         asignatura_id: asignaturaId,
         nombre: this.nombre,
@@ -35,10 +32,10 @@ export class CrearasignaturaprofePage implements OnInit {
         profesor_id: [],
       };
 
-      // Crear el documento en Firestore
+      // Crear el documento en Firestore llamando la funcion de AsignaturaService
       try {
         await this.asignaturaService.crearAsignatura(nuevaAsignatura);
-        this.navCtrl.back();  // Redirigir al profesor a la página anterior
+        this.navCtrl.back();  
       } catch (error) {
         console.error('Error al crear la asignatura:', error);
       }
@@ -47,8 +44,8 @@ export class CrearasignaturaprofePage implements OnInit {
     }
   }
 
+  //Generando el ID unico de la asignatura.
   generarIdAsignatura(): string {
-    // Generar un ID aleatorio único de 4 dígitos
     return (Math.floor(Math.random() * 9000) + 1000).toString();
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AsignaturaService } from 'src/app/services/asignatura.service';// Asegúrate de importar tu servicio
+import { AsignaturaService } from 'src/app/services/asignatura.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
@@ -11,17 +11,16 @@ import { Router } from '@angular/router';
 })
 export class ClaseprofesorPage implements OnInit {
   asignaturaId: string = '';
-  asignatura: any; // Para almacenar los detalles de la asignatura
-  alumnos: any[] = []; // Para almacenar los alumnos inscritos
-  profesores: any[] = []; // Para almacenar los profesores encargados
-  showAlumnos: boolean = false; // Controlar la visibilidad de los alumnos
-  showProfesores: boolean = false; // Controlar la visibilidad de los profesores
+  asignatura: any;
+  alumnos: any[] = []; 
+  profesores: any[] = []; 
+  showAlumnos: boolean = false; 
+  showProfesores: boolean = false; 
 
   constructor(private route: ActivatedRoute, private asignaturaService: AsignaturaService, private alertController: AlertController , private router: Router) {}
 
   ngOnInit() {
     const asignaturaIdParam = this.route.snapshot.paramMap.get('asignatura_id');
-
     if (asignaturaIdParam) {
       this.asignaturaId = asignaturaIdParam; 
       this.cargarAsignatura();
@@ -29,7 +28,7 @@ export class ClaseprofesorPage implements OnInit {
       console.error('El asignatura_id no está presente en la ruta');
     }
   }
-
+  //Cargando las asignaturas
   async cargarAsignatura() {
   this.asignatura = await this.asignaturaService.obtenerAsignaturaPorId(this.asignaturaId);
 
@@ -38,6 +37,7 @@ export class ClaseprofesorPage implements OnInit {
   this.alumnos = await this.asignaturaService.obtenerAlumnosPorUids(this.asignatura.alumnos);
   this.profesores = await this.asignaturaService.obtenerProfesoresPorUids(this.asignatura.profesor_id);
   
+//Alerta para crear el QR 
 }
 async presentAlert() {
   const alert = await this.alertController.create({
@@ -55,7 +55,6 @@ async presentAlert() {
       {
         text: 'Sí',
         handler: () => {
-          // Redirigir a la página para generar el QR
           this.router.navigate(['/qrprofesor', this.asignatura.asignatura_id]);
         },
       },

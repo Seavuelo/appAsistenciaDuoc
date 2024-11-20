@@ -1,5 +1,4 @@
 <app-encabezado></app-encabezado>
-
 <ion-content class="ion-padding" *ngIf="asignatura">
   <ion-card color="secondary" class="detail-card">
     <ion-card-header>
@@ -7,7 +6,6 @@
       <ion-card-subtitle>Aula: {{ asignatura.aula }}</ion-card-subtitle>
       <ion-card-subtitle>Horario: {{ asignatura.horario }}</ion-card-subtitle>
     </ion-card-header>
-
     <ion-card-content>
       <div class="toggle-container">
         <ion-item button (click)="toggleAlumnos()" class="toggle-item">
@@ -20,7 +18,6 @@
           </ion-item>
         </ion-list>
       </div>
-
       <div class="toggle-container">
         <ion-item button (click)="toggleProfesores()" class="toggle-item">
           <ion-label>Profesores Encargados</ion-label>
@@ -35,7 +32,6 @@
       <ion-button expand="full" color="primary" (click)="presentAlert()" class="create-qr-button">
         Crear QR de Asistencia
       </ion-button>
-      
     </ion-card-content>
   </ion-card>
 </ion-content>

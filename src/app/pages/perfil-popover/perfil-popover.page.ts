@@ -11,16 +11,16 @@ export class PerfilPopoverPage {
 
   constructor(private navCtrl: NavController, private authService: AuthService, private alertController: AlertController, private popoverController: PopoverController) { }
 
+  //Ir al Perfil
   async goToProfile() {
-    this.navCtrl.navigateForward('/perfil'); // Reemplaza '/perfil' con la ruta de tu página de perfil
-    await this.popoverController.dismiss(); // Cierra el popover
+    this.navCtrl.navigateForward('/perfil'); 
+    await this.popoverController.dismiss(); 
   }
 
-
+  //Metodo para Cerrar sesion
   async logOut() {
     const alert = await this.alertController.create({
       header: '¿Cerrar la Sesion?',
-   
       buttons: [
         {
           text: 'No',
@@ -33,15 +33,14 @@ export class PerfilPopoverPage {
         {
           text: 'Sí',
           handler: async () => {
-            await this.authService.logOut(); // Llama al método de cierre de sesión
+            await this.authService.logOut(); 
             console.log('Cerrando sesión...');
-            await this.popoverController.dismiss(); // Cierra el popover
-            this.navCtrl.navigateRoot('/login'); // Redirige al login o inicio después de cerrar sesión
+            await this.popoverController.dismiss(); 
+            this.navCtrl.navigateRoot('/login'); 
           }
         }
       ]
     });
-
-    await alert.present(); // Muestra el alert
+    await alert.present(); 
   }
 }

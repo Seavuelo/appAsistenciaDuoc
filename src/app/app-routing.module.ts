@@ -66,7 +66,8 @@ const routes: Routes = [
   {
     path: 'claseprofesor',
     loadChildren: () => import('./pages/claseprofesor/claseprofesor.module').then( m => m.ClaseprofesorPageModule)
-  },  {
+  },
+  {
     path: 'detallesclaseprofe',
     loadChildren: () => import('./pages/detallesclaseprofe/detallesclaseprofe.module').then( m => m.DetallesclaseprofePageModule)
   },
@@ -82,12 +83,6 @@ const routes: Routes = [
     path: 'crearasignaturaprofe',
     loadChildren: () => import('./pages/crearasignaturaprofe/crearasignaturaprofe.module').then( m => m.CrearasignaturaprofePageModule)
   },
-
-
-  
-
-  
-
 ];
 
 @NgModule({

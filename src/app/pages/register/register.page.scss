@@ -1,21 +1,21 @@
 .custom-alert {
     .alert-content {
       display: flex;
-      flex-direction: column; /* Coloca el icono y el texto en columna */
-      justify-content: center; /* Centra verticalmente */
-      align-items: center; /* Centra horizontalmente */
-      text-align: center; /* Centra el texto */
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
     }
   
     .check-icon {
-      font-size: 50px; /* Ajusta el tamaño del icono */
-      color: green; /* Cambia el color del icono */
-      margin-bottom: 10px; /* Espaciado entre el icono y el texto */
+      font-size: 50px; 
+      color: green; 
+      margin-bottom: 10px; 
     }
   
     p {
-      font-size: 20px; /* Tamaño del texto */
-      margin: 0; /* Elimina el margen por defecto */
+      font-size: 20px; 
+      margin: 0; 
     }
   }
   .info-message {
@@ -24,7 +24,7 @@
     text-align: center;
     margin-top: 30px;
   }
-  /* Asegúrate de que el texto dentro de los inputs sea negro */
+  
 ion-input {
-  --color: black; /* Texto negro dentro de los inputs */
+  --color: black; 
 }

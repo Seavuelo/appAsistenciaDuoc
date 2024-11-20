@@ -23,58 +23,56 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {}
 
-  // Método de registro
+  // Método de registro con sus errores
   async onRegister() {
-    // Validación de campos vacíos
     if (!this.email || !this.password || !this.confirmPassword) {
       this.showToast('Rellene todos los campos.', 'secondary');
       return;
     }
-
-    // Validación de que las contraseñas coincidan
     if (this.password !== this.confirmPassword) {
       this.showToast('Las contraseñas no coinciden.', 'secondary');
       return;
     }
-    if (!this.isEmailValid(this.email)) {
+    if (!this.CorreoValido(this.email)) {
       this.showToast('El correo debe ser valido', 'secondary');
       return;
     }
-    if (!this.isValidInstitutionEmail(this.email)) {
+    if (!this.CorreoInstitucion(this.email)) {
       this.showToast('Por favor, utilice un correo de la institución.', 'secondary');
       return;
     }
-    // Intentar registrar usuario
     try {
       const result = await this.authService.register(this.email, this.password);
-
-      if (result) { // Si el registro fue exitoso
-        // Mostrar alerta de registro exitoso
+      if (result) { 
         this.showAlert('¡Registro exitoso!', 'Has sido registrado con éxito.');
       } 
     } catch (error: any) {
       console.error('Error al registrar usuario:', error);
-      // Manejar errores de Firebase
       this.handleError(error.code);
     }
   }
-  isEmailValid(email: string): boolean {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar correo
+
+// Expresión regular para validar correo
+  CorreoValido(email: string): boolean {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
     return emailPattern.test(email);
   }
-  isValidInstitutionEmail(email: string): boolean {
+
+  //Para validar que el Email sea del Instituto
+  CorreoInstitucion(email: string): boolean {
     return email.endsWith('@profesorduoc.com') || email.endsWith('@alumnoduoc.com');
   }
-  // Mostrar mensaje temporal
+
   async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 2000, // Mostrar durante 2 segundos
-      color,          // Color basado en el tipo de mensaje
+      duration: 2000, 
+      color,          
       position: 'top'
     });
     toast.present();
   }
+
 
   async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
@@ -83,7 +81,7 @@ export class RegisterPage implements OnInit {
       buttons: [{
         text: 'Aceptar',
         handler: () => {
-          this.router.navigate(['/login']);  // Redirigir al login al aceptar
+          this.router.navigate(['/login']);  
         }
       }]
     });

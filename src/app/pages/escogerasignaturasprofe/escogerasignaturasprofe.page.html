@@ -1,7 +1,5 @@
 <app-encabezado></app-encabezado>
-
 <ion-content>
-  <!-- Lista de asignaturas -->
   <ion-card color="primary" class="card">
     <ion-card-header class="ion-text-center">
       <ion-card-title>Seleccione sus Asignaturas👇</ion-card-title>
@@ -22,8 +20,6 @@
       </ion-button>
     </ion-item>
   </ion-list>
-
-  <!-- Botón guardar cambios -->
   <ion-footer>
     <ion-button expand="full" color="primary" [routerLink]="['/crearasignaturaprofe']">
       Crear Asignaturas
@@ -31,6 +27,5 @@
     <ion-button expand="full" (click)="guardarCambios()" color="secondary" class="save-btn">
       Guardar cambios
     </ion-button>
-  
   </ion-footer>
 </ion-content>

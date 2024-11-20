@@ -5,14 +5,11 @@
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header> 
-
-<ion-content> <!-- Establecer el fondo blanco -->
+<ion-content> 
   <div *ngIf="userInfo; else noInfo">
-    <h2 style="text-align: center;">Información del Usuario</h2> <!-- Título centrado dentro del contenido -->
-
+    <h2 style="text-align: center;">Información del Usuario</h2> 
     <form *ngIf="isEditing; else displayInfo">
       <ion-item>
         <ion-label>Nombre:</ion-label>
@@ -35,9 +32,7 @@
         <ion-label>Correo Personal:</ion-label>
         <ion-input [(ngModel)]="userInfo.correo_personal" name="correo_personal"></ion-input>
       </ion-item>
-
     </form>
-
     <ng-template #displayInfo>
       <p class="user-info"><strong>Email:</strong> {{ userInfo.correo_institucional }}</p>
       <p class="user-info"><strong>Correo Personal:</strong> {{ userInfo.correo_personal }}</p>
@@ -45,8 +40,6 @@
       <p class="user-info"><strong>Apellido:</strong> {{ userInfo.apellido_paterno }} {{ userInfo.apellido_materno }}</p>
       <p class="user-info"><strong>Rol:</strong> {{ userInfo.rol }}</p>
    </ng-template>
-   
-
     <ion-button expand="full" color="secondary" (click)="editUserInfo()">
       {{ isEditing ? 'Guardar' : 'Editar' }}
     </ion-button>

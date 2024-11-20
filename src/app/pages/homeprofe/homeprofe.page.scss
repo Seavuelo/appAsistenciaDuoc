@@ -9,25 +9,25 @@
 }
 
 ion-header {
-    height: 0%;              /* Controla la altura del header */
+    height: 0%;              
     display: flex;
     flex-direction: column;
-    color: #fff;              /* Color del texto dentro del header */
+    color: #fff;              
     padding: 0px;  
     border: none;
     box-shadow: none;
-    background: none;          /* Espaciado interno */
+    background: none;         
   }
 .card{
     margin-top: -2.5rem;
 }
 .back-button {
-    position: absolute;   /* Posiciona el botón de manera absoluta en la pantalla */
-    top: 20px;            /* Ajusta la distancia desde la parte superior */
-    left: 20px;           /* Ajusta la distancia desde la parte izquierda */
-    z-index: 100;         /* Asegura que el botón se superponga a otros elementos */
-    background: rgba(238, 236, 108, 0.5); /* Fondo semitransparente para el botón */
-    color: white;         /* Color del icono */
-    border-radius: 50%;   /* Hace que el botón sea redondo */
+    position: absolute;   
+    top: 20px;            
+    left: 20px;           
+    z-index: 100;         
+    background: rgba(238, 236, 108, 0.5); 
+    color: white;         
+    border-radius: 50%;   
     border: none;
   }

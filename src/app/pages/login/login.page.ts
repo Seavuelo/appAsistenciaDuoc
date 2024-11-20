@@ -20,10 +20,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
+  //Funcion para iniciar Sesion
   async onLogin() {
     console.log('Intentando iniciar sesión con:', this.email, this.password);
     const result = await this.authService.login(this.email, this.password);
-
     if (result.success) {
       if (this.email.endsWith('@profesorduoc.com')) {
         this.router.navigate(['/homeprofe']);
@@ -35,6 +35,7 @@ export class LoginPage implements OnInit {
     }
   }
 
+  //Mostrando Alerta
   async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message,
@@ -45,6 +46,7 @@ export class LoginPage implements OnInit {
     toast.present();
   }
 
+  //Para errores de inicio de sesion
   handleLoginError(errorCode: string) {
     console.error('Error de inicio de sesión:', errorCode); 
     switch (errorCode) {

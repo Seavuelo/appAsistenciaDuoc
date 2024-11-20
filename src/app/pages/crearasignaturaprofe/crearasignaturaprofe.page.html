@@ -1,22 +1,18 @@
 <app-encabezado></app-encabezado>
 <ion-content>
-  
   <form (ngSubmit)="crearAsignatura()">
     <ion-item>
       <ion-label position="stacked">Nombre de la asignatura</ion-label>
       <ion-input [(ngModel)]="nombre" name="nombre" required pattern="^[a-zA-Z]+$"></ion-input>
     </ion-item>
-
     <ion-item>
       <ion-label position="stacked">Horario (Ejemplo: 12:30-14:00)</ion-label>
       <ion-input [(ngModel)]="horario" name="horario" required pattern="^\d{2}:\d{2}-\d{2}:\d{2}$"></ion-input>
     </ion-item>
-
     <ion-item>
       <ion-label position="stacked">Aula (4 dígitos)</ion-label>
       <ion-input [(ngModel)]="aula" name="aula" required pattern="^\d{4}$"></ion-input>
     </ion-item>
-
     <ion-button expand="full" type="submit" color="primary">
       Crear Asignatura
     </ion-button>

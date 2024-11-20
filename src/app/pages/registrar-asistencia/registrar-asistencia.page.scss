@@ -32,7 +32,6 @@ ion-input {
   color: var(--ion-color-dark);
 }
 
-/* Estilos para centrar y agrandar el botón */
 .fab-container {
   display: flex;
   justify-content: center;
@@ -44,14 +43,14 @@ ion-input {
 }
 
 .large-button {
-  width: 200px; /* Botón más grande */
+  width: 200px;
   height: 200px;
-  font-size: 2rem; /* Aumenta el tamaño del icono */
-  border-radius: 100px; /* Botón circular */
+  font-size: 2rem;
+  border-radius: 100px; 
 }
 
 .large-button ion-icon {
-  font-size: 4rem; /* Tamaño del icono grande */
+  font-size: 4rem; 
 }
 
 .location-info {

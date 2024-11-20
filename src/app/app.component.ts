@@ -10,7 +10,6 @@ import { Platform } from '@ionic/angular';
 })
 export class AppComponent implements OnInit {
   constructor(private platform: Platform) {
-    // Inicialización de Firebase
     const app = initializeApp(environment.firebase);
     console.log('Firebase initialized:', app);
     this.initializeApp();
@@ -21,7 +20,6 @@ ngOnInit() {
 }
 initializeApp() {
   this.platform.ready().then(() => {
-    // Forzar el modo oscuro
     document.body.classList.add('dark');
   });
 }

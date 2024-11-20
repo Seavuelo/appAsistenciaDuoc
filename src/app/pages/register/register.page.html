@@ -1,13 +1,10 @@
 <app-encabezado></app-encabezado>
-
 <ion-content color="primary">
   <ion-card color="primary">
     <ion-card-header class="ion-padding ion-text-center">
       <ion-card-title>Registro</ion-card-title>
     </ion-card-header>
-
     <ion-card-content>
-      <!-- Campo de Email -->
       <ion-item color="primary">
         <ion-label color="light">
           <ion-input 
@@ -17,12 +14,10 @@
             placeholder="Email@email.com" 
             [(ngModel)]="email"
             type="email"
-            style="color: rgb(255, 255, 255);"> <!-- Color del texto dentro del input -->
+            style="color: rgb(255, 255, 255);"> 
           </ion-input>
         </ion-label>
       </ion-item>
-
-      <!-- Campo de Contraseña -->
       <ion-item color="primary">
         <ion-label color="light">
           <ion-input 
@@ -32,12 +27,10 @@
             fill="solid" 
             placeholder="**********" 
             [(ngModel)]="password"
-            style="color: rgb(255, 255, 255);"> <!-- Color del texto dentro del input -->
+            style="color: rgb(255, 255, 255);"> 
           </ion-input>
         </ion-label>
       </ion-item>
-
-      <!-- Confirmar Contraseña -->
       <ion-item color="primary">
         <ion-label color="light">
           <ion-input 
@@ -47,12 +40,10 @@
             fill="solid" 
             placeholder="**********" 
             [(ngModel)]="confirmPassword"
-            style="color: rgb(255, 255, 255);"> <!-- Color del texto dentro del input -->
+            style="color: rgb(255, 255, 255);"> 
           </ion-input>
         </ion-label>
       </ion-item>
-
-      <!-- Botón de Registro -->
       <ion-button 
         (click)="onRegister()" 
         expand="block" 
@@ -61,7 +52,6 @@
         color="secondary">
         <strong>Registrarme</strong>
       </ion-button>
-      
       <p class="info-message">
         Para hacerte una cuenta de profesor, el correo debe terminar con <strong>&commat;profesorduoc.com</strong>, y para alumnos, con <strong>&commat;alumnoduoc.com</strong>.
       </p>

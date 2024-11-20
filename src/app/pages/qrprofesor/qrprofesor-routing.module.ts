@@ -5,7 +5,7 @@ import { QrprofesorPage } from './qrprofesor.page';
 
 const routes: Routes = [
   {
-    path: ':asignatura_id', // Esta línea es clave
+    path: ':asignatura_id', 
     component: QrprofesorPage
   }
 ];

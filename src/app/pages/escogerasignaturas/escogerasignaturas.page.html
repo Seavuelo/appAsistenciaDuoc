@@ -1,7 +1,5 @@
 <app-encabezado></app-encabezado>
-
 <ion-content>
-  <!-- Lista de asignaturas -->
   <ion-list lines="none">
     <ion-item *ngFor="let asignatura of asignaturas">
       <ion-label>
@@ -10,16 +8,12 @@
         <p>Aula: {{ asignatura.aula }}</p>
         <p>Horario: {{ asignatura.horario }}</p>
       </ion-label>
-
-      <!-- Checkbox para que el alumno escoja la asignatura -->
       <ion-checkbox 
         slot="start" 
         [(ngModel)]="asignatura.isSelected">
       </ion-checkbox>
     </ion-item>
   </ion-list>
-
-  <!-- Botón guardar cambios -->
   <ion-button expand="full" (click)="guardarSeleccion()" color="primary" class="save-btn">
-    Guardar selección
+    Guardar Asignatura
   </ion-button>

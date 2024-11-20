@@ -20,7 +20,7 @@ export class EscogerasignaturasprofePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.profesorId = this.authService.getCurrentUserUid() || ''; // Obtener el UID del profesor
+    this.profesorId = this.authService.getCurrentUserUid() || ''; 
   }
 
   async ionViewWillEnter() {
@@ -31,20 +31,14 @@ export class EscogerasignaturasprofePage implements OnInit {
 
   // Función para cargar todas las asignaturas
   async loadAsignaturas() {
-    // Obtener todas las asignaturas
     const todasAsignaturas = await this.AsignaturaService.obtenerTodasAsignaturas();
-
-    // Obtener las asignaturas en las que el profesor está asignado
     const asignaturasProfesor = await this.AsignaturaService.obtenerAsignaturasPorProfesor();
-
-    // Marcar las asignaturas que el profesor ya imparte
     todasAsignaturas.forEach(asignatura => {
       asignatura.isSelected = asignaturasProfesor.some(
         profAsignatura => profAsignatura.id === asignatura.id
       );
     });
 
-    // Asignar las asignaturas al componente
     this.asignaturas = todasAsignaturas;
   }
 
@@ -55,15 +49,15 @@ export class EscogerasignaturasprofePage implements OnInit {
       this.AsignaturaService.updateAsignaturaProfesor(asignatura.id, this.profesorId, isSelected);
     });
 
-    // Redirigir al usuario a la página de asignaturas
-    this.navCtrl.back(); // Vuelve a la página anterior (asignaturasprofe)
+    // Redirigir al profesor a la página de asignaturas
+    this.navCtrl.back();
   }
 
   // Función para confirmar la eliminación de una asignatura
   async confirmarEliminacion(asignaturaId: string) {
     const alert = await this.AlertController.create({
       header: 'Confirmar eliminación',
-      message: '¿Estás muy seguro de eliminar esta asignatura? Al hacer esto, los alumnos tendrán que inscribirse de nuevo y las clases serán eliminadas.',
+      message: '¿Estás seguro de eliminar esta asignatura? Al hacer esto, los alumnos tendrán que inscribirse de nuevo y las clases serán eliminadas.',
       buttons: [
         {
           text: 'Cancelar',
@@ -88,13 +82,8 @@ export class EscogerasignaturasprofePage implements OnInit {
   // Función para eliminar la asignatura y las clases asociadas
   async eliminarAsignatura(asignaturaId: string) {
     try {
-      // Eliminar asignatura
       await this.AsignaturaService.eliminarAsignatura(asignaturaId);
-
-      // Eliminar todas las clases asociadas a esta asignatura
       await this.AsignaturaService.eliminarClasesPorAsignaturaId(asignaturaId);
-
-      // Actualizar la lista de asignaturas después de eliminar
       this.loadAsignaturas();
       console.log('Asignatura y clases eliminadas con éxito');
     } catch (error) {
