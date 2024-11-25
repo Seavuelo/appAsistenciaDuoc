@@ -1,4 +1,13 @@
-<app-encabezado></app-encabezado>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/inicio']">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header> 
 
 <ion-content color="tertiary">
   <div id="header"></div>
@@ -20,6 +29,6 @@
     </ion-card-header>
   </ion-card>
   <ion-button expand="full" color="secondary" [routerLink]="['/escogerasignaturas']">
-    Escoger o editar tus Asignaturas
+    Escoger tus Asignaturas
   </ion-button>
 </ion-content>

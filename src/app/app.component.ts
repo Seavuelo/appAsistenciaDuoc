@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { environment } from '../environments/environment';
@@ -9,13 +10,15 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private AuthService:AuthService) {
     const app = initializeApp(environment.firebase);
     console.log('Firebase initialized:', app);
     this.initializeApp();
 
   }
-ngOnInit() {
+ngOnInit() {setInterval(() => {
+  this.AuthService.syncOfflineUsers();
+}, 30000); // 5 minutos
   
 }
 initializeApp() {

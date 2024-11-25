@@ -23,7 +23,7 @@ export class NavigationService {
     this.loading = await this.loadingController.create({
       message: message,
       spinner: 'crescent',
-      duration: 0  // No tiene duración límite, solo se oculta cuando se llama a dismiss
+      duration: 0 
     });
     await this.loading.present();
   }

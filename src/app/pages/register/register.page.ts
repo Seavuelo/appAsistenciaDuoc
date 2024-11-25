@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,8 @@ export class RegisterPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toastController: ToastController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private DataService:DataService
   ) { }
 
   ngOnInit() {}
@@ -34,20 +36,39 @@ export class RegisterPage implements OnInit {
       return;
     }
     if (!this.CorreoValido(this.email)) {
-      this.showToast('El correo debe ser valido', 'secondary');
+      this.showToast('El correo debe ser válido.', 'secondary');
       return;
     }
     if (!this.CorreoInstitucion(this.email)) {
       this.showToast('Por favor, utilice un correo de la institución.', 'secondary');
       return;
     }
+  
+    const isOnline = await this.DataService.isOnline();
+    
+    if (!isOnline) {
+      this.showToast('No hay conexión a internet. El registro debe realizarse con conexión.', 'secondary');
+      return;
+    }
+  
+    // Solo si hay internet, intentamos registrar al usuario en Firebase
+    const userData = { email: this.email, password: this.password };
+  
     try {
       const result = await this.authService.register(this.email, this.password);
-      if (result) { 
+      if (result.success) {
         this.showAlert('¡Registro exitoso!', 'Has sido registrado con éxito.');
-      } 
+        // Guardar los datos en localStorage solo después del registro exitoso en Firebase
+
+        const userRole = result.userRole ?? 'Invitado';
+        localStorage.setItem('userEmail', this.email);
+        localStorage.setItem('userRole', userRole); // Aquí se supone que tienes el rol o lo extraes del registro
+        localStorage.setItem('userName', this.email.split('@')[0]);
+        
+        // Redirigir al login solo después de un registro exitoso
+        this.router.navigate(['/login']);
+      }
     } catch (error: any) {
-      console.error('Error al registrar usuario:', error);
       this.handleError(error.code);
     }
   }

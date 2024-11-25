@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AsignaturaService } from 'src/app/services/asignatura.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-asistencia',
@@ -9,11 +11,23 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class AsistenciaPage implements OnInit {
   asignaturas: any[] = []; 
+  private backButtonSubscription: any;
 
-  constructor(private asignaturaService: AsignaturaService, private authService: AuthService) {}
 
-  async ngOnInit() {
+  constructor(private Platform:Platform, private Router:Router, private asignaturaService: AsignaturaService, private authService: AuthService) {}
+
+  ngOnInit() {
+    this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
+      await this.Router.navigate(['/inicio']);
+    });
   }
+
+  ngOnDestroy() {
+    if (this.backButtonSubscription) {
+      this.backButtonSubscription.unsubscribe();
+    }
+  }
+
   // Obtenemops el UID del alumno actual y con eso obtenemos las Asignaturas y su Asistencia
   async ionViewWillEnter() {
     const alumnoId = this.authService.getCurrentUserUid(); 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AsignaturaService } from 'src/app/services/asignatura.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-escogerasignaturasprofe',
@@ -11,17 +12,30 @@ import { NavController, AlertController } from '@ionic/angular';
 export class EscogerasignaturasprofePage implements OnInit {
   asignaturas: any[] = [];
   profesorId: string = '';
+  private backButtonSubscription: any;
 
   constructor(
     private AsignaturaService: AsignaturaService,
     private authService: AuthService,
     private navCtrl: NavController,
     private AlertController:AlertController,
+    private Router:Router,
+    private Platform:Platform
   ) { }
 
   ngOnInit() {
     this.profesorId = this.authService.getCurrentUserUid() || ''; 
+    this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
+      await this.Router.navigate(['/asignaturasprofe']);
+    });
   }
+
+  ngOnDestroy() {
+    if (this.backButtonSubscription) {
+      this.backButtonSubscription.unsubscribe();
+    }
+  }
+  
 
   async ionViewWillEnter() {
     this.loadAsignaturas();

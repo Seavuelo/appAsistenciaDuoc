@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Firestore,doc, getDoc, collection, getDocs, query, where, deleteDoc, arrayRemove, arrayUnion, updateDoc, addDoc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { NavigationService } from './Navigation.Service';
-import { AlertController } from '@ionic/angular'; // Asegúrate de tener este import
-
+import { AlertController } from '@ionic/angular'; 
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AsignaturaService {
-  constructor(private db: Firestore, private authService: AuthService, private NavigationService: NavigationService, private AlertController:AlertController) {}
+  constructor(private Storage:Storage, private db: Firestore, private authService: AuthService, private NavigationService: NavigationService, private AlertController:AlertController) {}
 
 
 

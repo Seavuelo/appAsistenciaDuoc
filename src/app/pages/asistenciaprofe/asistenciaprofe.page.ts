@@ -23,22 +23,17 @@ export class AsistenciaprofePage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // Cargar las asignaturas a cargo del profesor
     this.asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario();
-    // Cargar las clases por cada asignatura_id
     for (const asignatura of this.asignaturas) {
       const clases = await this.claseService.obtenerClasesPorAsignatura(asignatura.asignatura_id);
-      // Ordenar las clases de menor a mayor según 'fecha-hora'
       clases.sort((a, b) => a['fecha-hora'].toDate() - b['fecha-hora'].toDate());
       this.clases[asignatura.asignatura_id] = clases;
     }
   }
-  //Te lleva a la pagina de detalles de la clase
   verDetallesClase(codigo: string) {
     this.router.navigate(['/detallesclaseprofe', codigo]);
   }
 
-  //Aqui se eliminan las clases
   async eliminarClase(codigoClase: string, asignaturaId: string) {
     const alert = await this.alertController.create({
       header: 'Confirmar eliminación',

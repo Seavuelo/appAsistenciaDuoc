@@ -21,7 +21,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   locationMessage: string | null = null; 
   //Ubicacion DUOC: { lat: -36.79538244183323, lng: -73.06152573267023 }; 
   //Ubicacion Casa Seba: { lat: -36.60909853022575, lng: -72.96350965358964 };
-  readonly institutionCoords =  { lat: -36.79538244183323, lng: -73.06152573267023 }; 
+  readonly institutionCoords = { lat: -36.79538244183323, lng: -73.06152573267023 }; 
   readonly allowedDistance = 120; 
   offlineData: any[] = []; 
 
@@ -99,28 +99,72 @@ export class RegistrarAsistenciaPage implements OnInit {
   //Ya escaneado el QR se procesa esto, te deja presente o te avisa de algun error
   async processQR(codigoQR: string, alumnoId: string) {
     try {
+      await this.NavigationService.presentLoading('Procesando QR...');
+      
+      // Obtener referencia de la clase con el código QR
       const claseRef = doc(this.firestore, `clase/${codigoQR}`);
       const claseSnap = await getDoc(claseRef);
+      
       if (!claseSnap.exists()) {
+        await this.NavigationService.dismissLoading();
         await this.presentAlert('QR inválido', 'El código QR no corresponde a ninguna clase.');
         return;
       }
+  
       const claseData = claseSnap.data();
+  
+      // Verificar si el alumno ya está registrado en esta clase
       if (claseData['asistentes'] && claseData['asistentes'].includes(alumnoId)) {
+        await this.NavigationService.dismissLoading();
         await this.presentAlert('Ya estás presente', 'Ya estás registrado en esta clase.');
         return;
       }
+  
+      // Obtener el asignatura_id vinculado a la clase
+      const asignaturaId = claseData['asignatura_id'];
+      if (!asignaturaId) {
+        await this.NavigationService.dismissLoading();
+        await this.presentAlert('Error', 'No se encontró información de la asignatura para esta clase.');
+        return;
+      }
+  
+      // Verificar si el alumno pertenece a la asignatura
+      const asignaturaRef = doc(this.firestore, `asignatura/${asignaturaId}`);
+      const asignaturaSnap = await getDoc(asignaturaRef);
+  
+      if (!asignaturaSnap.exists()) {
+        await this.NavigationService.dismissLoading();
+        await this.presentAlert('Error', 'No se encontró información de la asignatura.');
+        return;
+      }
+  
+      const asignaturaData = asignaturaSnap.data();
+  
+      if (!asignaturaData['alumnos'] || !asignaturaData['alumnos'].includes(alumnoId)) {
+        await this.NavigationService.dismissLoading();
+        await this.presentAlert(
+          'No perteneces a esta clase',
+          'Tu usuario no está registrado en la asignatura vinculada a esta clase.'
+        );
+        return;
+      }
+  
+      // Registrar asistencia del alumno
       await updateDoc(claseRef, {
-        asistentes: arrayUnion(alumnoId)
+        asistentes: arrayUnion(alumnoId),
       });
+  
+      await this.NavigationService.dismissLoading();
       await this.presentAlert('Asistencia registrada', 'Tu asistencia ha sido registrada exitosamente.');
     } catch (error) {
       console.error('Error al procesar QR:', error);
+      await this.NavigationService.dismissLoading();
       await this.presentAlert('Error', 'Hubo un problema al registrar tu asistencia. Intenta nuevamente.');
     } finally {
       await this.NavigationService.dismissLoading();
     }
   }
+  
   
   
   //Para salvar los datos sin internet.

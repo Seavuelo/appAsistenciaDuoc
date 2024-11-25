@@ -2,17 +2,22 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Network } from '@capacitor/network';
 import { Geolocation } from '@capacitor/geolocation';
+import { Firestore, collection, query, getDocs, where } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  isOnline: boolean = true;
-  offlineData: any[] = [];  // Aquí guardaremos los datos mientras el dispositivo esté offline
+  onlineStatus: boolean = true;
+  offlineData: any[] = []; 
 
-  constructor(private storage: Storage) {
+  constructor(
+    private storage: Storage, 
+    private firestore: Firestore,  
+    private router: Router
+  ) {
     this.init();
-    this.initializeNetworkEvents();
   }
 
   async init() {
@@ -30,24 +35,19 @@ export class DataService {
   }
 
   // Inicializar eventos de red para monitorear el estado de la conexión
-  initializeNetworkEvents() {
-    Network.addListener('networkStatusChange', status => {
-      this.isOnline = status.connected;
-      console.log('Network status changed', status);
-    });
-  }
+ 
 
   // Verificar si estamos conectados a la red
   async checkNetworkStatus() {
     const status = await Network.getStatus();
-    this.isOnline = status.connected;
-    return this.isOnline;
+    this.onlineStatus = status.connected;
+    return this.onlineStatus;
   }
 
   // Guardar datos cuando el dispositivo esté offline
   async saveOfflineData(data: any) {
     this.offlineData.push(data);
-    await this.setData('offlineData', this.offlineData); // Guarda los datos en el almacenamiento local
+    await this.setData('offlineData', this.offlineData); 
   }
 
   // Sincronizar los datos guardados mientras el dispositivo estuvo offline
@@ -55,24 +55,22 @@ export class DataService {
     if (this.offlineData.length > 0) {
       for (const data of this.offlineData) {
         const { codigoQR, alumnoId } = data;
-        await this.processQR(codigoQR, alumnoId); // Vuelve a procesar los datos
+        await this.processQR(codigoQR, alumnoId); 
       }
-      this.offlineData = []; // Limpia los datos una vez sincronizados
-      await this.setData('offlineData', []); // Elimina los datos almacenados localmente
+      this.offlineData = []; 
+      await this.setData('offlineData', []);
     }
   }
 
   // Este es un ejemplo de cómo podrías procesar los datos del QR cuando la conexión esté disponible
   async processQR(codigoQR: string, alumnoId: string) {
-    // Aquí deberías incluir la lógica para procesar el QR y guardar la asistencia en Firebase
     console.log(`Procesando QR: ${codigoQR} para el alumno: ${alumnoId}`);
-    // Llamar a Firestore para guardar los datos o realizar alguna acción con el QR
   }
 
   // Limpiar los datos almacenados localmente
   async clearOfflineData() {
     this.offlineData = [];
-    await this.setData('offlineData', []); // Elimina los datos guardados
+    await this.setData('offlineData', []); 
   }
 
   // Obtener los datos offline almacenados
@@ -93,5 +91,26 @@ export class DataService {
       return null;
     }
   }
-}
 
+
+
+  // Guardar usuarios offline
+  async saveOfflineUser(userData: any) {
+    const offlineUsers = (await this.getData('offlineUsers')) || [];
+    offlineUsers.push(userData);
+    await this.setData('offlineUsers', offlineUsers);
+  }
+
+  // Obtener los usuarios offline
+  
+
+  // Obtener el usuario actual
+  async getCurrentUser() {
+    return await this.getData('currentUser');
+  }
+
+  // Verificar el estado de la conexión
+  async isOnline(): Promise<boolean> {
+    return await this.checkNetworkStatus();
+  }
+}

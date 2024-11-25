@@ -25,7 +25,7 @@ export class ClaseService {
       throw new Error('Clase no encontrada');
     }
   
-    const claseData = querySnapshot.docs[0].data(); // Asume que `codigo` es único
+    const claseData = querySnapshot.docs[0].data(); 
     return claseData;
   }
 

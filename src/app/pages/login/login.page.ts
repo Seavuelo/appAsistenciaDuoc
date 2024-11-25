@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastController } from '@ionic/angular';
+import { DataService } from 'src/app/services/data.service';
+import { FirebaseError } from 'firebase/app';
+import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
+
 
 @Component({
   selector: 'app-login',
@@ -15,23 +19,61 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private DataService: DataService
   ) {}
 
   ngOnInit() {}
 
   //Funcion para iniciar Sesion
   async onLogin() {
-    console.log('Intentando iniciar sesión con:', this.email, this.password);
-    const result = await this.authService.login(this.email, this.password);
-    if (result.success) {
-      if (this.email.endsWith('@profesorduoc.com')) {
-        this.router.navigate(['/homeprofe']);
-      } else if (this.email.endsWith('@alumnoduoc.com')) {
-        this.router.navigate(['/inicio']);
+    const isOnline = await this.DataService.isOnline();
+  
+    if (isOnline) {
+      try {
+        const result = await this.authService.login(this.email, this.password);
+  
+        if (result.success) {
+          this.navigateToHome();
+          return;
+        } else {
+          this.handleLoginError(result.message);
+        }
+      } catch (error: unknown) {
+        if (error instanceof FirebaseError) {
+          this.handleLoginError(error.code);
+        } else {
+          console.error('Error desconocido:', error);
+          this.showToast('Error inesperado. Intenta de nuevo.', 'danger');
+        }
       }
     } else {
-      this.handleLoginError(result.message);
+      // Recuperar datos del localStorage y del almacenamiento seguro
+      const storedEmail = localStorage.getItem('userEmail');
+      const storedUserName = localStorage.getItem('userName');
+      const storedUserRole = localStorage.getItem('userRole');
+  
+      if (storedEmail && storedUserName && storedUserRole) {
+        const storedPasswordResult = await SecureStoragePlugin.get({ key: storedEmail });
+        const storedPassword = storedPasswordResult?.value;
+  
+        if (this.email === storedEmail && this.password === storedPassword) {
+          this.navigateToHome();
+        } else {
+          this.showToast('Correo o contraseña incorrectos.', 'danger');
+        }
+      } else {
+        this.showToast('No se encontraron datos de usuario almacenados en el dispositivo.', 'danger');
+      }
+    }
+  }
+  
+  
+  navigateToHome() {
+    if (this.email.endsWith('@profesorduoc.com')) {
+      this.router.navigate(['/homeprofe']);
+    } else if (this.email.endsWith('@alumnoduoc.com')) {
+      this.router.navigate(['/inicio']);
     }
   }
 

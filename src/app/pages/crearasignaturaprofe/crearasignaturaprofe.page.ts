@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { AsignaturaService } from 'src/app/services/asignatura.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crearasignaturaprofe',
@@ -11,12 +12,24 @@ export class CrearasignaturaprofePage implements OnInit {
   nombre: string = '';
   horario: string = '';
   aula: string = '';
+  private backButtonSubscription: any;
 
   constructor(
     private asignaturaService: AsignaturaService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private Router:Router,
+    private Platform:Platform
   ) {}
-  ngOnInit() {}
+  ngOnInit() {this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
+    await this.Router.navigate(['/escogerasignaturasprofe']);
+  });
+}
+
+ngOnDestroy() {
+  if (this.backButtonSubscription) {
+    this.backButtonSubscription.unsubscribe();
+  }
+}
 
 
   //Para Crear la Asignatura

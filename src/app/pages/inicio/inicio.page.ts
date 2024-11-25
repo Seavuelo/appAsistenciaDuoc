@@ -3,6 +3,7 @@ import { Platform, AlertController, PopoverController, NavController } from '@io
 import { AuthService } from 'src/app/services/auth.service';
 import { Itemlist } from 'src/app/interfaces/itemlist';
 import { PerfilPopoverPage } from '../perfil-popover/perfil-popover.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -12,23 +13,26 @@ import { PerfilPopoverPage } from '../perfil-popover/perfil-popover.page';
 export class InicioPage implements OnInit {
   private backButtonSubscription: any;
   private popover: any; 
+  
 
   constructor(
     private popoverController: PopoverController,
     private Platform:Platform,
     private AuthService:AuthService,
     private AlertController:AlertController,
-    private NavController:NavController
+    private NavController:NavController,
+    private Router:Router
   ) {}
 
   ngOnInit() {
     this.backButtonSubscription = this.Platform.backButton.subscribeWithPriority(10, async () => {
-      if (this.popover) {
-        await this.popover.dismiss();
-      } else {
-        await this.logOut();
-      }
-    });
+      if (this.Router.url === '/inicio') { 
+        if (this.popover) {
+          await this.popover.dismiss();
+        } else {
+          await this.logOut();
+        }
+      } });
   }
 
   ngOnDestroy() {
