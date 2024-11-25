@@ -34,10 +34,9 @@
       </ion-item>
     </form>
     <ng-template #displayInfo>
+      <p class="user-info"><strong>Nombre:</strong> {{ userInfo.nombre }} {{ userInfo.segundo_nombre }} {{ userInfo.apellido_paterno }} {{ userInfo.apellido_materno }}</p>
       <p class="user-info"><strong>Email:</strong> {{ userInfo.correo_institucional }}</p>
       <p class="user-info"><strong>Correo Personal:</strong> {{ userInfo.correo_personal }}</p>
-      <p class="user-info"><strong>Nombre:</strong> {{ userInfo.nombre }} {{ userInfo.segundo_nombre }}</p>
-      <p class="user-info"><strong>Apellido:</strong> {{ userInfo.apellido_paterno }} {{ userInfo.apellido_materno }}</p>
       <p class="user-info"><strong>Rol:</strong> {{ userInfo.rol }}</p>
    </ng-template>
     <ion-button expand="full" color="secondary" (click)="editUserInfo()">

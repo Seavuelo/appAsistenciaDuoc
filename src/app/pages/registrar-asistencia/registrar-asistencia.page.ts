@@ -99,7 +99,6 @@ export class RegistrarAsistenciaPage implements OnInit {
   //Ya escaneado el QR se procesa esto, te deja presente o te avisa de algun error
   async processQR(codigoQR: string, alumnoId: string) {
     try {
-      await this.NavigationService.presentLoading('Procesando QR...');
       
       // Obtener referencia de la clase con el código QR
       const claseRef = doc(this.firestore, `clase/${codigoQR}`);
