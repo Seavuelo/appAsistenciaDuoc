@@ -30,18 +30,32 @@ export class AsistenciaPage implements OnInit {
 
   // Obtenemops el UID del alumno actual y con eso obtenemos las Asignaturas y su Asistencia
   async ionViewWillEnter() {
-    const alumnoId = this.authService.getCurrentUserUid(); 
-    if (alumnoId) {
-      try {
-        const asignaturasConAsistencia = await this.asignaturaService.obtenerAsignaturasYAsistencia(alumnoId);
-        this.asignaturas = asignaturasConAsistencia; 
-      } catch (error) {
-        console.error('Error al obtener las asignaturas o la asistencia:', error);
+    let alumnoId: string | null;
+  
+    try {
+      alumnoId = this.authService.getCurrentUserUid();
+    } catch (error) {
+      console.warn('No se pudo obtener el UID desde el servicio de autenticación:', error);
+      alumnoId = null;
+    }
+  
+    if (!alumnoId) {
+      alumnoId = localStorage.getItem('user_uid');
+      if (!alumnoId) {
+        console.error("No se encontró el UID del alumno en el almacenamiento local.");
+        return;
+      } else {
+        console.log("UID obtenido desde el almacenamiento local:", alumnoId);
       }
     } else {
-      console.error("No se encontró el UID del alumno.");
+      console.log("UID obtenido desde el servicio de autenticación:", alumnoId);
     }
-
-    
-  }
-}
+  
+    try {
+      const asignaturasConAsistencia = await this.asignaturaService.obtenerAsignaturasYAsistencia(alumnoId);
+      this.asignaturas = asignaturasConAsistencia;
+    } catch (error) {
+      console.error('Error al obtener las asignaturas o la asistencia:', error);
+    }
+  
+  }}

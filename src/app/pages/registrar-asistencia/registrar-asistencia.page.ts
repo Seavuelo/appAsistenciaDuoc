@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AlertController } from '@ionic/angular';
-import { Firestore, doc, getDoc, updateDoc, arrayUnion } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc, arrayUnion, collection, getDocs, where, query } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { NavigationService } from 'src/app/services/Navigation.Service';
@@ -21,7 +21,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   locationMessage: string | null = null; 
   //Ubicacion DUOC: { lat: -36.79538244183323, lng: -73.06152573267023 }; 
   //Ubicacion Casa Seba: { lat: -36.60909853022575, lng: -72.96350965358964 };
-  readonly institutionCoords = { lat: -36.79538244183323, lng: -73.06152573267023 }; 
+  readonly institutionCoords = { lat: -36.60909853022575, lng: -72.96350965358964 };
   readonly allowedDistance = 120; 
   offlineData: any[] = []; 
 
@@ -96,10 +96,8 @@ export class RegistrarAsistenciaPage implements OnInit {
   }
   
 
-  //Ya escaneado el QR se procesa esto, te deja presente o te avisa de algun error
   async processQR(codigoQR: string, alumnoId: string) {
     try {
-      
       // Obtener referencia de la clase con el código QR
       const claseRef = doc(this.firestore, `clase/${codigoQR}`);
       const claseSnap = await getDoc(claseRef);
@@ -119,26 +117,26 @@ export class RegistrarAsistenciaPage implements OnInit {
         return;
       }
   
-      // Obtener el asignatura_id vinculado a la clase
+      // Obtener el 'asignatura_id' de los datos de la clase
       const asignaturaId = claseData['asignatura_id'];
-      if (!asignaturaId) {
+  
+      // Buscar la asignatura correspondiente en la colección 'asignatura'
+      const asignaturasRef = collection(this.firestore, 'asignatura');
+      const q = query(asignaturasRef, where('asignatura_id', '==', asignaturaId)); 
+      const querySnapshot = await getDocs(q);
+  
+      // Si no se encuentra la asignatura
+      if (querySnapshot.empty) {
         await this.NavigationService.dismissLoading();
-        await this.presentAlert('Error', 'No se encontró información de la asignatura para esta clase.');
+        await this.presentAlert('Error', 'No se encontró la asignatura vinculada a esta clase.');
         return;
       }
   
-      // Verificar si el alumno pertenece a la asignatura
-      const asignaturaRef = doc(this.firestore, `asignatura/${asignaturaId}`);
-      const asignaturaSnap = await getDoc(asignaturaRef);
+      // Obtener los datos de la asignatura
+      const asignaturaDoc = querySnapshot.docs[0];  
+      const asignaturaData = asignaturaDoc.data();
   
-      if (!asignaturaSnap.exists()) {
-        await this.NavigationService.dismissLoading();
-        await this.presentAlert('Error', 'No se encontró información de la asignatura.');
-        return;
-      }
-  
-      const asignaturaData = asignaturaSnap.data();
-  
+      // Verificar si el alumno está en el campo 'alumnos' de la asignatura
       if (!asignaturaData['alumnos'] || !asignaturaData['alumnos'].includes(alumnoId)) {
         await this.NavigationService.dismissLoading();
         await this.presentAlert(
@@ -147,6 +145,7 @@ export class RegistrarAsistenciaPage implements OnInit {
         );
         return;
       }
+  
   
       // Registrar asistencia del alumno
       await updateDoc(claseRef, {

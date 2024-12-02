@@ -68,6 +68,7 @@ async register(email: string, password: string) {
 
     // Guardar la información del usuario en Firestore
     await setDoc(doc(this.db, 'usuario', uid), userInfo);
+    
 
     // Guardar la contraseña de forma segura en el dispositivo
     await SecureStoragePlugin.set({ key: email, value: password });
@@ -76,6 +77,7 @@ async register(email: string, password: string) {
     localStorage.setItem('userEmail', email);
     localStorage.setItem('userRole', rol);
     localStorage.setItem('userName', nombre);
+    localStorage.setItem('user_uid', uid);
 
     // Retornar el éxito del registro con el rol
     return { success: true, user: userCredential.user, userRole: rol };
@@ -103,11 +105,12 @@ async login(email: string, password: string): Promise<any> {
     const userEmail = userCredential.user.email || '';
     const userName = userEmail.split('@')[0];
     const userRole = await this.fetchUserRole(userCredential.user.uid);
-
+    const userUid = this._storage
     // Guardar datos en localStorage
     localStorage.setItem('userEmail', userEmail);
     localStorage.setItem('userName', userName);
     localStorage.setItem('userRole', userRole);
+    localStorage.setItem('user_uid', userCredential.user.uid)
 
     // Guardar contraseña en almacenamiento seguro
     await SecureStoragePlugin.set({

@@ -52,8 +52,9 @@ export class LoginPage implements OnInit {
       const storedEmail = localStorage.getItem('userEmail');
       const storedUserName = localStorage.getItem('userName');
       const storedUserRole = localStorage.getItem('userRole');
+      const storedUserUid = localStorage.getItem('user_uid')
   
-      if (storedEmail && storedUserName && storedUserRole) {
+      if (storedEmail && storedUserName && storedUserRole && storedUserUid) {
         const storedPasswordResult = await SecureStoragePlugin.get({ key: storedEmail });
         const storedPassword = storedPasswordResult?.value;
   
