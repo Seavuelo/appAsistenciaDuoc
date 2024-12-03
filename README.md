@@ -1,36 +1,49 @@
-# appAsistencia
+# **AsistenciaApp** 📚📲  
+Gestión inteligente de asistencia en establecimientos educacionales  
 
-AsistenciaApp es una aplicación móvil desarrollada en Ionic Angular diseñada para optimizar la gestión de asistencia en establecimientos educacionales. La aplicación ofrece herramientas intuitivas para profesores y alumnos, simplificando el registro, monitoreo y confirmación de asistencia mediante tecnologías como Firebase y LocalStorage de Ionic.
+**AsistenciaApp** es una aplicación móvil desarrollada en **Ionic Angular** que revoluciona cómo los estudiantes y profesores gestionan la asistencia. Con funciones como escaneo de códigos QR, roles personalizados y análisis de asistencia, la aplicación asegura simplicidad, eficiencia y precisión.  
 
-Características
-Registro e Inicio de Sesión
+---
 
-Autenticación mediante correo electrónico y contraseña utilizando Firebase Authentication.
-Inicio de sesión local con LocalStorage para garantizar acceso offline tras la autenticación inicial.
-Gestión de Roles
+## 🚀 **Características Principales**  
 
-Profesor: Acceso a herramientas administrativas, como creación, edición y eliminación de asignaturas y clases.
-Alumno: Acceso a información personalizada, como asignaturas inscritas, porcentajes de asistencia y confirmación de asistencia en tiempo real.
-Funciones para Alumnos
+### 🔐 **Registro e Inicio de Sesión**  
+- **Autenticación**: Registro y acceso mediante correo electrónico y contraseña con **Firebase Authentication**.  
+- **Modo Offline**: Inicio de sesión local con **LocalStorage** para garantizar acceso sin conexión.  
 
-Visualización y selección de asignaturas disponibles.
-Consulta de porcentaje de asistencia e información asociada a cada asignatura.
-Confirmación de asistencia mediante escaneo de códigos QR.
-Verificación automática de ubicación para confirmar la presencia dentro del establecimiento.
-Actualización instantánea del estado de asistencia en la base de datos.
-Funciones para Profesores
+### 🎓 **Funciones para Alumnos**  
+- Inscripción y visualización de asignaturas.  
+- Consulta de estadísticas, como el porcentaje de asistencia.  
+- **Confirmación de asistencia**:  
+  - Escaneo de códigos QR únicos para cada clase.  
+  - Verificación automática de ubicación para validar presencia en el establecimiento.  
 
-Creación, edición y eliminación de asignaturas.
-Gestión de alumnos inscritos y profesores asignados a cada asignatura.
-Generación de códigos QR únicos para cada clase, facilitando la confirmación de asistencia.
-Visualización de clases impartidas, incluyendo:
-Listado de alumnos presentes.
-Registro de profesores responsables.
-Fecha y hora de las clases.
-Eliminación de clases según sea necesario.
-Tecnologías Utilizadas
-Ionic Angular: Framework híbrido para el desarrollo multiplataforma.
-Firebase: Manejo de autenticación y sincronización en tiempo real.
-LocalStorage de Ionic: Almacenamiento seguro de datos de usuario para acceso sin conexión.
-Capacitor Geolocation: Verificación de ubicación para confirmación de asistencia mediante GPS.
-AsistenciaApp mejora la experiencia educativa al digitalizar y automatizar procesos clave de asistencia, garantizando confiabilidad y accesibilidad para alumnos y profesores.
+### 👩‍🏫 **Funciones para Profesores**  
+- Gestión completa de asignaturas: creación, edición y eliminación.  
+- Generación de códigos QR únicos para el registro de asistencia.  
+- Consulta de clases impartidas:  
+  - Listado de alumnos presentes.  
+  - Registro de profesores responsables.  
+  - Detalles como fecha y hora de la clase.  
+- Eliminación de clases antiguas o no necesarias.  
+
+---
+
+## 🛠️ **Tecnologías Utilizadas**  
+
+| **Tecnología**          | **Uso**                                |  
+|-------------------------|----------------------------------------|  
+| **Ionic Angular**       | Desarrollo híbrido multiplataforma.    |  
+| **Firebase**            | Autenticación y sincronización en tiempo real. |  
+| **Capacitor Geolocation** | Verificación de ubicación para asistencia. |  
+| **LocalStorage**        | Almacenamiento local para uso offline. |  
+
+---
+
+## 🌟 **Ventajas de AsistenciaApp**  
+
+- **Optimización del tiempo**: Registro rápido mediante QR y localización.  
+- **Multiplataforma**: Funciona en dispositivos Android y iOS.  
+- **Acceso seguro**: Autenticación robusta con soporte offline.  
+
+---
