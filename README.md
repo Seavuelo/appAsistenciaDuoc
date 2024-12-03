@@ -1,7 +1,7 @@
 # **AsistenciaApp** 📚📲  
 Gestión inteligente de asistencia en establecimientos educacionales  
 
-**AsistenciaApp** es una aplicación móvil desarrollada en **Ionic Angular** que revoluciona cómo los estudiantes y profesores gestionan la asistencia. Con funciones como escaneo de códigos QR, roles personalizados y análisis de asistencia, la aplicación asegura simplicidad, eficiencia y precisión.  
+**AsistenciaApp** es una aplicación móvil desarrollada en **Ionic Angular** que revoluciona cómo los estudiantes y profesores gestionan la asistencia. Con funciones como escaneo de códigos QR, geolocalizacion y análisis de asistencia, la aplicación asegura simplicidad, eficiencia y precisión.  
 
 ---
 
