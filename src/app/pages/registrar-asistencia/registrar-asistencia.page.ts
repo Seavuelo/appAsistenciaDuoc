@@ -21,7 +21,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   locationMessage: string | null = null; 
   //Ubicacion DUOC: { lat: -36.79538244183323, lng: -73.06152573267023 }; 
   //Ubicacion Casa Seba: { lat: -36.60909853022575, lng: -72.96350965358964 };
-  readonly institutionCoords = { lat: -36.60909853022575, lng: -72.96350965358964 };
+  readonly institutionCoords = { lat: -36.79538244183323, lng: -73.06152573267023 }; 
   readonly allowedDistance = 120; 
   offlineData: any[] = []; 
 
