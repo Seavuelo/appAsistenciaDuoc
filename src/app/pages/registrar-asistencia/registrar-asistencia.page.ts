@@ -50,6 +50,7 @@ export class RegistrarAsistenciaPage implements OnInit {
   //Aqui se ve si se tienen los permisos de camara activos o cumple con los requisitos, para despues proceder a scanear.
   async scan(): Promise<void> {
     await this.NavigationService.presentLoading('Cargando datos...');
+    
     const granted = await this.requestPermissions();
     if (!granted) {
       this.presentAlert('Permiso denegado', 'Para usar la aplicación, autoriza los permisos de cámara.');
@@ -58,42 +59,65 @@ export class RegistrarAsistenciaPage implements OnInit {
     }
   
     const position = await this.checkLocation();
-    this.locationMessage = position ? `Ubicación actual: ${this.latitude?.toFixed(6)}, ${this.longitude?.toFixed(6)}` : 'No se pudo obtener la ubicación.';
-  
+    this.locationMessage = position
+      ? `Ubicación actual: ${this.latitude?.toFixed(6)}, ${this.longitude?.toFixed(6)}`
+      : 'No se pudo obtener la ubicación.';
+    
     if (!position) {
-      this.presentAlert('Ubicación no permitida', 'No estás dentro del área permitida para registrar asistencia.' + this.locationMessage);
+      this.presentAlert(
+        'Ubicación no permitida',
+        'No estás dentro del área permitida para registrar asistencia. ' + this.locationMessage
+      );
       await this.NavigationService.dismissLoading();  
       return;
     }
+  
     const { barcodes } = await BarcodeScanner.scan();
     this.barcodes = barcodes;
+  
     if (barcodes.length === 0) {
       this.presentAlert('QR inválido', 'No se detectó ningún código QR.');
       await this.NavigationService.dismissLoading();  
       return;
     }
+  
     const codigoQR = barcodes[0].rawValue;
+    const storedUserUid = localStorage.getItem('user_uid');
     const alumnoId = this.AuthService.getCurrentUserUid();
-    if (!alumnoId) {
+    
+    // Verificar que al menos uno de los identificadores esté disponible
+    const userId = alumnoId || storedUserUid;
+    if (!userId) {
       this.presentAlert('Error', 'No se ha podido obtener el ID del usuario. Asegúrate de estar autenticado.');
       await this.NavigationService.dismissLoading(); 
       return;
     }
+  
     if (!codigoQR || codigoQR.length !== 5) {
       this.presentAlert('QR inválido', 'El código QR escaneado no es válido.');
       await this.NavigationService.dismissLoading(); 
       return;
     }
-    //Aqui si no hay conexion, se guardan los datos para enviarlo cuando haya conexion.
+  
     const networkStatus = await Network.getStatus();
     if (!networkStatus.connected) {
-      await this.saveOfflineData({ codigoQR, alumnoId, latitude: this.latitude, longitude: this.longitude });
-      this.presentAlert('A la espera de conexión', 'Se guardó tu asistencia localmente. Se enviará cuando haya conexión.');
+      await this.saveOfflineData({
+        codigoQR,
+        alumnoId: userId, // Se usa `userId` en lugar de `alumnoId`
+        latitude: this.latitude,
+        longitude: this.longitude,
+      });
+      this.presentAlert(
+        'A la espera de conexión',
+        'Se guardó tu asistencia localmente. Se enviará cuando haya conexión.'
+      );
       await this.NavigationService.dismissLoading();  
       return;
     }
-    await this.processQR(codigoQR, alumnoId);  
+  
+    await this.processQR(codigoQR, userId); // Se usa `userId` aquí también
   }
+  
   
 
   async processQR(codigoQR: string, alumnoId: string) {
